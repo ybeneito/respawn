@@ -24,6 +24,7 @@ __screenshots__/
 .env
 .env.local
 .env.*.local
+src/environments/environment.prod.ts
 
 # Supabase
 supabase/.branches/
