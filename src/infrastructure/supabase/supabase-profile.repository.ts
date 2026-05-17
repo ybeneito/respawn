@@ -1,0 +1,65 @@
+import { Injectable } from '@angular/core';
+import { UserProfile, CatPalette } from '../../domain/profile/user-profile.entity';
+import { Streak } from '../../domain/profile/streak.entity';
+import { CreateProfileDto, IUserProfileRepository } from '../../domain/profile/profile.repository';
+import { supabase } from './supabase.client';
+
+@Injectable({ providedIn: 'root' })
+export class SupabaseProfileRepository implements IUserProfileRepository {
+  async findById(userId: string): Promise<UserProfile | null> {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    if (error) return null;
+    return this.toEntity(data);
+  }
+
+  async save(profile: UserProfile): Promise<UserProfile> {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        xp: profile.xp,
+        level: profile.level,
+        lives: profile.lives,
+        streak_current: profile.streak.current,
+        streak_longest: profile.streak.longest,
+        last_activity_date: profile.streak.lastActivityDate?.toISOString().split('T')[0] ?? null,
+      })
+      .eq('id', profile.userId)
+      .select()
+      .single();
+    if (error) throw error;
+    return this.toEntity(data);
+  }
+
+  async create(dto: CreateProfileDto): Promise<UserProfile> {
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert({ id: dto.userId, username: dto.username, palette: dto.palette })
+      .select()
+      .single();
+    if (error) throw error;
+    return this.toEntity(data);
+  }
+
+  private toEntity(row: Record<string, unknown>): UserProfile {
+    const streak = new Streak(
+      row['streak_current'] as number,
+      row['streak_longest'] as number,
+      row['last_activity_date'] ? new Date(row['last_activity_date'] as string) : null,
+    );
+    return new UserProfile(
+      row['id'] as string,
+      row['username'] as string,
+      null,
+      row['palette'] as CatPalette,
+      row['xp'] as number,
+      row['level'] as number,
+      row['lives'] as number,
+      streak,
+      new Date(row['created_at'] as string),
+    );
+  }
+}
