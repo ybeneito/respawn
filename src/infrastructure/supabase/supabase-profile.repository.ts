@@ -12,7 +12,8 @@ export class SupabaseProfileRepository implements IUserProfileRepository {
       .select('*')
       .eq('id', userId)
       .single();
-    if (error) return null;
+    if (error?.code === 'PGRST116') return null;
+    if (error) throw error;
     return this.toEntity(data);
   }
 
