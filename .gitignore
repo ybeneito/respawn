@@ -2,10 +2,23 @@
 design-export/
 design-export.json
 
-# Angular
-node_modules/
-dist/
-.angular/
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Angular cache
+/.angular/cache
+.sass-cache/
+/coverage
+/typings
+__screenshots__/
 
 # Env
 .env
@@ -16,14 +29,29 @@ dist/
 supabase/.branches/
 supabase/.temp/
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
+# IDEs and editors
 .idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+.vscode/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
+
+# OS
+.DS_Store
+Thumbs.db
