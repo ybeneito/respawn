@@ -8,14 +8,14 @@ const day = (offset: number) => {
 };
 
 describe('Streak', () => {
-  it('initialise le streak à 1 si aucune activité précédente', () => {
+  it('initializes streak to 1 with no prior activity', () => {
     const streak = new Streak(0, 0, null);
     const { streak: next, broken } = streak.evaluate(day(0));
     expect(next.current).toBe(1);
     expect(broken).toBe(false);
   });
 
-  it('incrémente si activité hier', () => {
+  it('increments when last activity was yesterday', () => {
     const streak = new Streak(5, 5, day(-1));
     const { streak: next, broken } = streak.evaluate(day(0));
     expect(next.current).toBe(6);
@@ -23,14 +23,14 @@ describe('Streak', () => {
     expect(broken).toBe(false);
   });
 
-  it('ne change pas si déjà évalué aujourd\'hui', () => {
+  it('does not change if already evaluated today', () => {
     const streak = new Streak(5, 5, day(0));
     const { streak: next, broken } = streak.evaluate(day(0));
     expect(next.current).toBe(5);
     expect(broken).toBe(false);
   });
 
-  it('remet à 1 si gap > 1 jour et signale broken', () => {
+  it('resets to 1 and signals broken when gap is more than 1 day', () => {
     const streak = new Streak(5, 5, day(-3));
     const { streak: next, broken } = streak.evaluate(day(0));
     expect(next.current).toBe(1);

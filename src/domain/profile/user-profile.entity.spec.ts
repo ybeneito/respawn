@@ -6,26 +6,26 @@ const makeProfile = (xp = 0, level = 1, lives = 9) =>
   new UserProfile('u1', 'pixelcat', null, 'orange', xp, level, lives, new Streak(0, 0, null), new Date());
 
 describe('UserProfile', () => {
-  it('applyXP ajoute les XP sans level up', () => {
+  it('applyXP adds XP without triggering level up', () => {
     const { profile, levelUp } = makeProfile(50).applyXP(30);
     expect(profile.xp).toBe(80);
     expect(profile.level).toBe(1);
     expect(levelUp).toBe(false);
   });
 
-  it('applyXP déclenche level up en franchissant le seuil', () => {
+  it('applyXP triggers level up when crossing the threshold', () => {
     const { profile, levelUp } = makeProfile(90).applyXP(15);
     expect(profile.xp).toBe(105);
     expect(profile.level).toBe(2); // seuil level 2 = 100 XP
     expect(levelUp).toBe(true);
   });
 
-  it('applyXP décrémente une vie si streak broken', () => {
+  it('applyXP decrements a life when streak is broken', () => {
     const { profile } = makeProfile(0, 1, 9).applyXP(5, true);
     expect(profile.lives).toBe(8);
   });
 
-  it('stageForLevel retourne le bon stade', () => {
+  it('stageForLevel returns the correct stage for each level boundary', () => {
     expect(makeProfile().stageForLevel(1)).toBe('kitten');
     expect(makeProfile().stageForLevel(4)).toBe('stray');
     expect(makeProfile().stageForLevel(8)).toBe('ninja');
