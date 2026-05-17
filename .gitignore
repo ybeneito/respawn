@@ -1,0 +1,29 @@
+# Design export (référence locale uniquement, non versionné)
+design-export/
+design-export.json
+
+# Angular
+node_modules/
+dist/
+.angular/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

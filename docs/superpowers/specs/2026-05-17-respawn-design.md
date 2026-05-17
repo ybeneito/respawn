@@ -2,13 +2,22 @@
 
 **Date:** 2026-05-17  
 **Status:** Approved  
-**Stack:** Angular + Supabase + TypeScript
+**Stack:** Angular + Supabase + TypeScript  
+**Tagline:** 9 LIVES · 1 DAY AT A TIME  
+**Design export:** `design-export/respawn/project/design_handoff_respawn/`
 
 ---
 
 ## Vision
 
-Respawn est une application de gestion d'objectifs gamifiée. Chaque jour, l'utilisateur "respawn" — il relance sa run, affronte ses défis, accumule de l'XP et maintient son streak. Les tâches ne sont pas une liste à cocher : ce sont des quêtes à accomplir. Les amis ne sont pas des contacts : ce sont des rivaux et alliés dans un classement commun.
+Respawn est une application de gestion d'objectifs gamifiée. Chaque jour, l'utilisateur "respawn" — il relance sa run, affronte ses défis, accumule de l'XP et maintient son streak. Les quêtes ne sont pas une liste à cocher : ce sont des combats à mener. Les amis ne sont pas des contacts : ce sont des rivaux et alliés dans un classement commun.
+
+**Vocabulaire définitif (issu du design) :**
+- Tâches → **Quests**
+- Défis → **Duels**
+- Priorités → raretés : `low` (Common) / `med` (Uncommon) / `hi` (Rare) / `urg` (Epic)
+
+**Périmètre v1 :** desktop-first, largeur minimale ~1100px. Pas de mobile en phase 1.
 
 ---
 
@@ -16,9 +25,9 @@ Respawn est une application de gestion d'objectifs gamifiée. Chaque jour, l'uti
 
 | Phase | Contenu | Livrable |
 |-------|---------|----------|
-| 1 | Auth + Tâches + XP/Levels/Streaks | App solo gamifiée |
-| 2 | Leaderboard + Défis + Amis | Couche sociale complète |
-| 3 | AI Task Parser (Claude API) | Création de tâches assistée |
+| 1 | Auth + Quests + XP/Levels/Streaks | App solo gamifiée |
+| 2 | Leaderboard + Duels + Amis | Couche sociale complète |
+| 3 | AI Quest Parser (Claude API) | Création de quêtes assistée |
 
 ---
 
@@ -35,7 +44,7 @@ Clean Architecture + Feature Modules Angular. Les dépendances pointent toujours
 │   Supabase repos, realtime, auth        │
 ├─────────────────────────────────────────┤
 │              Application                │
-│   use cases (CompleteTask, ComputeXP…)  │
+│   use cases (CompleteQuest, ComputeXP…)  │
 ├─────────────────────────────────────────┤
 │               Domain                    │
 │   entités TS pures, aucune dépendance   │
@@ -95,7 +104,7 @@ src/
     auth/
       supabase-auth.adapter.ts
     ai/
-      claude-task-parser.ts           ← phase 3, implémente ITaskParser
+      claude-task-parser.ts           ← phase 3, implémente IQuestParser
 
   app/
     core/
@@ -116,20 +125,20 @@ src/
 
 ### Entités
 
-#### Task
+#### Quest
 ```typescript
-class Task {
+class Quest {
   id: string
   ownerId: string
   title: string
   description?: string
-  status: TaskStatus        // TODO | IN_PROGRESS | DONE
-  priority: TaskPriority    // LOW | MEDIUM | HIGH | URGENT
+  status: QuestStatus        // TODO | IN_PROGRESS | DONE
+  priority: QuestPriority    // LOW | MEDIUM | HIGH | URGENT
   dueDate?: Date
   completedAt?: Date
   createdAt: Date
 
-  complete(): { task: Task; xpEarned: number }
+  complete(): { task: Quest; xpEarned: number }
 }
 ```
 
@@ -159,34 +168,34 @@ class Streak {
 }
 ```
 
-#### Challenge
+#### Duel
 ```typescript
-class Challenge {
+class Duel {
   id: string
   challengerId: string
   challengedId: string
   title: string
-  metric: ChallengeMetric   // TASKS_COMPLETED | XP_EARNED
+  metric: DuelMetric   // TASKS_COMPLETED | XP_EARNED
   startDate: Date
   endDate: Date
-  status: ChallengeStatus   // PENDING | ACTIVE | COMPLETED | CANCELLED
+  status: DuelStatus   // PENDING | ACTIVE | COMPLETED | CANCELLED
   challengerMessage?: string
   challengedMessage?: string
   winnerId?: string
 
   isExpired(today: Date): boolean
-  resolveWinner(challengerScore: number, challengedScore: number): Challenge
+  resolveWinner(challengerScore: number, challengedScore: number): Duel
 }
 ```
 
-### Barème XP
+### Barème XP (issu du design)
 
-| Priorité | XP de base |
-|----------|-----------|
-| LOW      | 10 XP     |
-| MEDIUM   | 25 XP     |
-| HIGH     | 50 XP     |
-| URGENT   | 100 XP    |
+| Rareté | Label | XP de base |
+|--------|-------|-----------|
+| `low`  | Common   | 5 XP  |
+| `med`  | Uncommon | 15 XP |
+| `hi`   | Rare     | 35 XP |
+| `urg`  | Epic     | 80 XP |
 
 **Streak bonus :** +10% par jour de streak consécutif, plafonné à +100% (streak ≥ 10 jours).
 
@@ -204,10 +213,10 @@ class Challenge {
 ### Interfaces repository (ports)
 
 ```typescript
-interface ITaskRepository {
-  findByUser(userId: string): Promise<Task[]>
-  findById(id: string): Promise<Task | null>
-  save(task: Task): Promise<Task>
+interface IQuestRepository {
+  findByUser(userId: string): Promise<Quest[]>
+  findById(id: string): Promise<Quest | null>
+  save(task: Quest): Promise<Quest>
 }
 
 interface IUserProfileRepository {
@@ -216,10 +225,10 @@ interface IUserProfileRepository {
   findFriendsLeaderboard(userId: string, period: 'week' | 'month' | 'all'): Promise<UserProfile[]>
 }
 
-interface IChallengeRepository {
-  findActive(userId: string): Promise<Challenge[]>
-  findById(id: string): Promise<Challenge | null>
-  save(challenge: Challenge): Promise<Challenge>
+interface IDuelRepository {
+  findActive(userId: string): Promise<Duel[]>
+  findById(id: string): Promise<Duel | null>
+  save(challenge: Duel): Promise<Duel>
 }
 
 interface IFriendshipRepository {
@@ -234,45 +243,107 @@ interface INotificationRepository {
   save(notification: Notification): Promise<Notification>
 }
 
-interface ITaskParser {
-  parse(text: string): Promise<TaskDraft>
+interface IQuestParser {
+  parse(text: string): Promise<QuestDraft>
 }
 ```
 
 ---
 
+## Design System
+
+Référence complète : `design-export/respawn/project/design_handoff_respawn/styles.css`
+
+### Tokens couleurs (oklch)
+```
+--bg-void:    oklch(0.13 0.035 285)   /* fond page */
+--bg-deep:    oklch(0.17 0.04 285)    /* nav + rail */
+--bg-panel:   oklch(0.22 0.05 285)    /* modales */
+--bg-card:    oklch(0.27 0.05 285)    /* cartes */
+--bg-card-hi: oklch(0.32 0.055 285)   /* hover/highlight */
+
+--acc-purple: oklch(0.65 0.22 305)    /* CTA principal, nav active */
+--acc-teal:   oklch(0.78 0.16 195)    /* CTA secondaire, "+ New Quest" */
+--acc-amber:  oklch(0.82 0.16 75)     /* XP, gold, streaks */
+--acc-rose:   oklch(0.7 0.22 18)      /* vies (cœurs) */
+--acc-green:  oklch(0.78 0.18 145)    /* succès, "winning" */
+
+--acc-rarity-low: oklch(0.7 0.04 240)
+--acc-rarity-med: oklch(0.75 0.18 145)
+--acc-rarity-hi:  oklch(0.7 0.2 260)
+--acc-rarity-urg: oklch(0.78 0.2 35)
+```
+
+### Typographie
+- **Press Start 2P** — titres, valeurs de stats, badges de rareté, boutons. Toujours uppercase.
+- **VT323** — corps de texte, titres de quêtes, usernames. 16–24px.
+- **Silkscreen** — labels, captions, métadonnées. 9–12px, all caps.
+
+### Composants UI clés
+- `.pbox` — carte avec double border via `box-shadow`, 0 border-radius
+- `.pbtn` — bouton SNES (top highlight + bottom shadow inset + hard drop shadow)
+- `.pprog` — barre XP segmentée amber, transition `steps(20)` 
+- `.notch-corners` — coins écrêtés pixel via `clip-path`
+- `.pinput` — input sombre avec inset border teal au focus
+- `.scanlines` / `.vignette` — effets CRT optionnels
+
+### Animations — toujours `steps(N)`, jamais d'easing smooth
+- `idle-bob-slow` 2.4s — bob vertical du chat compagnon
+- `pop-in` 280–400ms — entrée des modales et révélations level-up
+- `flag-shake` 0.3s — bannière "LEVEL UP!"
+- `flash` 200–700ms — flash blanc lors de l'évolution du chat
+
+### Système chat compagnon
+
+**Palette (choisie à l'onboarding, immuable) :**
+`orange` · `black` · `slate` · `white` · `brown` · `siamese` · `calico` · `void`
+
+**Stades (dérivés du level, jamais stockés) :**
+| Stade | Levels | Identité |
+|-------|--------|----------|
+| Kitten    | 1–3  | Petite tête, grands yeux, pas de corps |
+| Stray     | 4–7  | Chat adulte ordinaire |
+| Ninja     | 8–12 | Bandeau rouge + masque noir |
+| Samurai   | 13–18| Hachimaki blanc, armure, katana |
+| Arcane    | 19–25| Chapeau de mage, orbe cyan flottant |
+| Legendary | 26+  | Couronne dorée, étincelles cosmiques |
+
+Sprites encodés en grilles de strings dans `sprites.jsx`. Implémentation Angular : reproduire le rendu pixel-div ou exporter en PNG via un pipeline de sprites.
+
+---
+
 ## Application layer — Use cases
 
-### CompleteTask (phase 1 — critique)
+### CompleteQuest (phase 1 — critique)
 
 ```
-Input : taskId, userId, today: Date
-1. taskRepo.findById(taskId)
-2. task.complete()                       → xpEarned (priorité × streak bonus)
+Input : questId, userId, today: Date
+1. questRepo.findById(questId)
+2. quest.complete()                      → xpEarned (rareté × streak bonus)
 3. profileRepo.findById(userId)
 4. streak.evaluate(today)                → maintient / incrémente / reset
 5. profile.applyXP(xpEarned)            → recalcule level si seuil franchi
-6. taskRepo.save(task)
+6. questRepo.save(quest)
 7. profileRepo.save(profile)
-Output : { task, xpEarned, levelUp: boolean, streak }
+Output : { quest, xpEarned, levelUp: boolean, newLevel?: number, streak }
 ```
 
-Ce retour riche alimente directement les animations de feedback dans l'UI.
+Ce retour riche alimente : toast XP (1.2s), level-up takeover si `levelUp: true`.
 
 ### GetUserDashboard (phase 1)
-Agrège tâches du jour + profil XP/level/streak en une seule passe.
+Agrège quêtes du jour + profil XP/level/streak/lives en une seule passe.
 
-### LaunchChallenge (phase 2)
-Crée un challenge PENDING avec message optionnel, notifie l'adversaire.
+### LaunchDuel (phase 2)
+Crée un duel PENDING avec message optionnel, notifie l'adversaire.
 
-### AcceptChallenge (phase 2)
-Passe le challenge à ACTIVE, enregistre le message de réponse optionnel.
+### AcceptDuel (phase 2)
+Passe le duel à ACTIVE, enregistre le message de réponse optionnel.
 
-### ResolveChallenge (phase 2)
+### ResolveDuel (phase 2)
 Appelé par edge function Supabase à `end_date` — calcule les scores et désigne le winner.
 
-### ParseTaskFromText (phase 3)
-Délègue à `ITaskParser`. En phase 1 : règles locales (mots-clés → priorité). En phase 3 : Claude API.
+### ParseQuestFromText (phase 3)
+Délègue à `IQuestParser`. En phase 1 : règles locales (mots-clés → rareté). En phase 3 : Claude API.
 
 ---
 
@@ -318,7 +389,7 @@ CREATE TABLE friendships (
 );
 
 -- Défis
-CREATE TABLE challenges (
+CREATE TABLE duels (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   challenger_id       UUID NOT NULL REFERENCES profiles(id),
   challenged_id       UUID NOT NULL REFERENCES profiles(id),
@@ -368,13 +439,13 @@ CREATE POLICY "friendships_insert" ON friendships FOR INSERT TO authenticated
 CREATE POLICY "friendships_update" ON friendships FOR UPDATE TO authenticated
   USING (addressee_id = (SELECT auth.uid()));
 
--- challenges : visible si participant, créable uniquement en tant que challenger
-ALTER TABLE challenges ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "challenges_select" ON challenges FOR SELECT TO authenticated
+-- duels : visible si participant, créable uniquement en tant que challenger
+ALTER TABLE duels ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "duels_select" ON duels FOR SELECT TO authenticated
   USING (challenger_id = (SELECT auth.uid()) OR challenged_id = (SELECT auth.uid()));
-CREATE POLICY "challenges_insert" ON challenges FOR INSERT TO authenticated
+CREATE POLICY "duels_insert" ON duels FOR INSERT TO authenticated
   WITH CHECK (challenger_id = (SELECT auth.uid()));
-CREATE POLICY "challenges_update" ON challenges FOR UPDATE TO authenticated
+CREATE POLICY "duels_update" ON duels FOR UPDATE TO authenticated
   USING (challenger_id = (SELECT auth.uid()) OR challenged_id = (SELECT auth.uid()));
 
 -- notifications : uniquement les siennes
@@ -403,7 +474,7 @@ Recherche par username
 
 ### Flow challenge
 ```
-Challenger : choisit ami + métrique + dates + message?
+Duelr : choisit ami + métrique + dates + message?
   → challenge: PENDING
   → notification → adversaire accepte (+ message?) ou refuse
   → si accepté : challenge: ACTIVE
@@ -416,19 +487,40 @@ Challenger : choisit ami + métrique + dates + message?
 
 ```typescript
 // core/di-tokens.ts
-export const TASK_REPOSITORY      = new InjectionToken<ITaskRepository>('TaskRepository')
+export const TASK_REPOSITORY      = new InjectionToken<IQuestRepository>('QuestRepository')
 export const PROFILE_REPOSITORY   = new InjectionToken<IUserProfileRepository>('ProfileRepository')
-export const CHALLENGE_REPOSITORY = new InjectionToken<IChallengeRepository>('ChallengeRepository')
-export const TASK_PARSER          = new InjectionToken<ITaskParser>('TaskParser')
+export const CHALLENGE_REPOSITORY = new InjectionToken<IDuelRepository>('DuelRepository')
+export const TASK_PARSER          = new InjectionToken<IQuestParser>('QuestParser')
 
 // app.config.ts
 providers: [
-  { provide: TASK_REPOSITORY,      useClass: SupabaseTaskRepository },
+  { provide: TASK_REPOSITORY,      useClass: SupabaseQuestRepository },
   { provide: PROFILE_REPOSITORY,   useClass: SupabaseProfileRepository },
-  { provide: CHALLENGE_REPOSITORY, useClass: SupabaseChallengeRepository },
-  { provide: TASK_PARSER,          useClass: LocalTaskParser },  // phase 3 → ClaudeTaskParser
+  { provide: CHALLENGE_REPOSITORY, useClass: SupabaseDuelRepository },
+  { provide: TASK_PARSER,          useClass: LocalQuestParser },  // phase 3 → ClaudeQuestParser
 ]
 ```
+
+---
+
+## Internationalisation (i18n)
+
+**Langue affichée :** français (phase 1 uniquement).  
+**Stratégie :** Angular i18n natif (`$localize` + XLIFF) — 0 dépendance externe, suffisant pour le volume de texte de l'app.
+
+**Règle :** aucun texte UI hardcodé dans les templates Angular. Tous les labels, messages d'erreur et copies utilisent `i18n` attribute ou `$localize`.
+
+**Vocabulaire UI en français :**
+- Quests → **Quêtes**
+- Duels → **Défis**
+- Leaderboard → **Classement**
+- Streak → **Série**
+- Lives → **Vies**
+- Level Up → **Niveau supérieur**
+- New Quest → **Nouvelle quête**
+- Dashboard → **Tableau de bord**
+
+**Note :** le design system (noms de variables CSS, classes, constantes TS) reste en anglais. Seuls les textes affichés à l'utilisateur sont traduits.
 
 ---
 
@@ -460,7 +552,7 @@ chore/X   ← setup, config, tooling
 ```
 [feat] Friend requests
 [feat] Leaderboard
-[feat] Challenges (launch + accept + resolve)
+[feat] Duels (launch + accept + resolve)
 [feat] Notifications in-app (realtime)
 ```
 
@@ -509,7 +601,7 @@ erDiagram
         uuid addressee_id FK
         text status
     }
-    challenges {
+    duels {
         uuid id PK
         uuid challenger_id FK
         uuid challenged_id FK
@@ -529,15 +621,15 @@ erDiagram
 
     profiles ||--o{ tasks : "owns"
     profiles ||--o{ friendships : "requests"
-    profiles ||--o{ challenges : "challenges"
+    profiles ||--o{ duels : "duels"
     profiles ||--o{ notifications : "receives"
 ```
 
-### Flow — CompleteTask
+### Flow — CompleteQuest
 
 ```mermaid
 flowchart TD
-    A[CompleteTask appelé] --> B[task.complete]
+    A[CompleteQuest appelé] --> B[task.complete]
     B --> C[Calcul XP\npriority × streak bonus]
     C --> D[streak.evaluate today]
     D --> E{Activité hier?}
@@ -555,14 +647,14 @@ flowchart TD
     M --> N[Retour: task, xpEarned,\nlevelUp, streak]
 ```
 
-### Flow — Challenge lifecycle
+### Flow — Duel lifecycle
 
 ```mermaid
 stateDiagram-v2
-    [*] --> PENDING : LaunchChallenge\n+ message?
-    PENDING --> ACTIVE : AcceptChallenge\n+ message?
-    PENDING --> CANCELLED : RejectChallenge
-    ACTIVE --> COMPLETED : end_date atteinte\nResolveChallenge
+    [*] --> PENDING : LaunchDuel\n+ message?
+    PENDING --> ACTIVE : AcceptDuel\n+ message?
+    PENDING --> CANCELLED : RejectDuel
+    ACTIVE --> COMPLETED : end_date atteinte\nResolveDuel
     ACTIVE --> CANCELLED : Annulation mutuelle
     COMPLETED --> [*]
     CANCELLED --> [*]
