@@ -52,7 +52,7 @@ CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS $$
 BEGIN
   INSERT INTO profiles (id, username)
-  VALUES (NEW.id, SPLIT_PART(NEW.email, '@', 1));
+  VALUES (NEW.id, COALESCE(SPLIT_PART(NEW.email, '@', 1), 'user_' || SUBSTR(NEW.id::text, 1, 8)));
   RETURN NEW;
 END;
 $$;
