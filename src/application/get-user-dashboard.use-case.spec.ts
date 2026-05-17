@@ -15,7 +15,7 @@ const questRepo = { findByUser: vi.fn().mockResolvedValue(quests), findById: vi.
 const profileRepo = { findById: vi.fn().mockResolvedValue(profile), save: vi.fn(), create: vi.fn() };
 
 describe('GetUserDashboardUseCase', () => {
-  it('retourne le profil et les quêtes du jour séparées done/active', async () => {
+  it('returns the user profile and today quests split into active and done', async () => {
     const useCase = new GetUserDashboardUseCase(questRepo, profileRepo);
     const { todayActive, todayDone, userProfile } = await useCase.execute('u1');
     expect(todayActive).toHaveLength(1);

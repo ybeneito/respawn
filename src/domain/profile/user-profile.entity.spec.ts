@@ -16,7 +16,7 @@ describe('UserProfile', () => {
   it('applyXP triggers level up when crossing the threshold', () => {
     const { profile, levelUp } = makeProfile(90).applyXP(15);
     expect(profile.xp).toBe(105);
-    expect(profile.level).toBe(2); // seuil level 2 = 100 XP
+    expect(profile.level).toBe(2); // level 2 threshold = 100 XP
     expect(levelUp).toBe(true);
   });
 

@@ -24,7 +24,7 @@ const makeRepos = (quest: Quest, profile: UserProfile) => ({
 });
 
 describe('CompleteQuestUseCase', () => {
-  it('retourne la quête complétée avec XP et streak', async () => {
+  it('returns the completed quest with XP earned and incremented streak', async () => {
     const { questRepo, profileRepo } = makeRepos(makeQuest(), makeProfile());
     const useCase = new CompleteQuestUseCase(questRepo, profileRepo);
     const result = await useCase.execute('q1', 'u1', new Date());
@@ -35,7 +35,7 @@ describe('CompleteQuestUseCase', () => {
     expect(result.levelUp).toBe(false);
   });
 
-  it('déclenche levelUp si le seuil est franchi', async () => {
+  it('triggers level up when XP threshold is crossed', async () => {
     const richProfile = new UserProfile('u1', 'cat', null, 'orange', 90, 1, 9, new Streak(0, 0, null), new Date());
     const urgQuest = new Quest('q1', 'u1', 'Big task', 'todo', 'urg', 'work', true, null, new Date());
     const { questRepo, profileRepo } = makeRepos(urgQuest, richProfile);

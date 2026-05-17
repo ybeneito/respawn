@@ -13,7 +13,7 @@ const mockRepo: IQuestRepository = {
 };
 
 describe('CreateQuestUseCase', () => {
-  it('crée une quête avec le bon owner et la bonne rareté', async () => {
+  it('creates a quest with the correct owner and rarity', async () => {
     const useCase = new CreateQuestUseCase(mockRepo);
     const quest = await useCase.execute({ ownerId: 'u1', title: 'Ma quête', rarity: 'hi', tag: 'work', today: true });
     expect(quest.title).toBe('Ma quête');
