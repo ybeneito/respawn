@@ -2,6 +2,9 @@
 design-export/
 design-export.json
 
+# Internal project notes
+docs/
+
 # Compiled output
 /dist
 /tmp
