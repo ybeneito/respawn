@@ -1,59 +1,147 @@
-# Respawn
+# RESPAWN
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+> 9 LIVES · 1 DAY AT A TIME
 
-## Development server
+A pixel-art SNES-inspired quest tracker where completing your daily tasks earns XP, levels up your cat companion, and keeps your streak alive — one life at a time.
 
-To start a local development server, run:
+---
+
+## Concept
+
+Respawn turns your todo list into a roguelite loop:
+
+- **Quests** have rarity tiers (Common → Urgent) worth 5 to 80 XP
+- **Streaks** multiply your XP up to ×2 — break one and you lose a life
+- **9 lives** — your cat companion survives that many broken streaks before it's game over
+- **Cat companion** evolves across 6 stages (Kitten → Legendary) as you level up, with 8 colour palettes chosen at first login
+
+---
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Frontend | Angular 21 — standalone components, Signals, OnPush |
+| Backend | Supabase (PostgreSQL, Auth, RLS) |
+| Testing | Vitest via Angular builder |
+| Package manager | pnpm |
+| Language | TypeScript strict |
+
+**Architecture:** Clean Architecture + Hexagonal. Domain layer is pure TypeScript — zero Angular or Supabase dependencies. Use cases orchestrate domain entities via repository interfaces. Supabase adapters implement those interfaces and are injected via `InjectionToken`.
+
+---
+
+## Roadmap
+
+- **Phase 1 — Solo** *(in progress)*: Auth, quests, XP, levels, streaks, cat companion
+- **Phase 2 — Social**: Leaderboard, duels (challenges between players), friends
+- **Phase 3 — AI**: Natural language quest parser via Claude API
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm
+- Docker (for local Supabase)
+
+### Install
 
 ```bash
-ng serve
+pnpm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Local database
 
 ```bash
-ng generate component component-name
+# Start local Supabase instance (Docker)
+pnpm db:start
+
+# Copy env template and fill in the anon key shown by db:start
+cp .env.example .env
+
+# Reset DB and apply all migrations
+pnpm db:reset
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Dev server
 
 ```bash
-ng generate --help
+pnpm start
+# → http://localhost:4200
 ```
 
-## Building
-
-To build the project run:
+### Tests
 
 ```bash
-ng build
+# All tests
+pnpm test
+
+# Specific file
+pnpm ng test --include="**/filename.spec.ts" --watch=false
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Database scripts
 
-## Running unit tests
+| Script | Description |
+|---|---|
+| `pnpm db:start` | Start local Supabase (Docker) |
+| `pnpm db:stop` | Stop local Supabase |
+| `pnpm db:reset` | Drop and recreate DB, replay all migrations |
+| `pnpm db:status` | Show local URL and credentials |
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+---
 
-```bash
-ng test
+## Project structure
+
+```
+src/
+  domain/          # Pure TypeScript — no framework deps
+    quest/         # Quest entity, XP calculation, rarity
+    profile/       # UserProfile, Streak, level progression, cat stages
+  application/     # Use cases (CompleteQuest, CreateQuest, GetUserDashboard)
+  infrastructure/  # Supabase adapters (repositories, auth service)
+  app/
+    core/          # DI tokens, auth guard
+    shared/        # Pixel UI components (PixelButton, CatSprite, XpBar…)
+    features/      # Auth, Quests, Dashboard screens
+supabase/
+  migrations/      # PostgreSQL schema + RLS policies
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## XP system
 
-```bash
-ng e2e
-```
+| Rarity | Base XP | CSS class |
+|---|---|---|
+| Common | 5 | `.rarity-low` |
+| Medium | 15 | `.rarity-med` |
+| High | 35 | `.rarity-hi` |
+| Urgent | 80 | `.rarity-urg` |
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Streak bonus: **+10 % per day**, capped at **+100 %** (≥ 10 days).
 
-## Additional Resources
+## Level thresholds
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Level | XP required |
+|---|---|
+| 1 | 0 |
+| 2 | 100 |
+| 3 | 250 |
+| 4 | 500 |
+| 5 | 1 000 |
+| n ≥ 6 | n² × 40 |
+
+## Cat stages
+
+| Stage | Levels |
+|---|---|
+| Kitten | 1 – 3 |
+| Stray | 4 – 7 |
+| Ninja | 8 – 12 |
+| Samurai | 13 – 18 |
+| Arcane | 19 – 25 |
+| Legendary | 26+ |
