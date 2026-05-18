@@ -1,0 +1,11 @@
+<div class="sprite-container" [style.width.px]="containerWidth()" [style.height.px]="containerHeight()">
+  @for (pixel of pixels(); track pixel.x + '-' + pixel.y) {
+    <div class="pixel"
+      [style.left.px]="pixel.x * pixelSize()"
+      [style.top.px]="pixel.y * pixelSize()"
+      [style.width.px]="pixelSize()"
+      [style.height.px]="pixelSize()"
+      [style.background]="pixel.color">
+    </div>
+  }
+</div>

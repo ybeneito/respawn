@@ -1,0 +1,8 @@
+.sprite-container {
+  position: relative;
+  image-rendering: pixelated;
+  animation: idle-bob-slow 2.4s steps(4) infinite;
+}
+.pixel {
+  position: absolute;
+}
