@@ -19,21 +19,16 @@ export class CatSpriteComponent {
   readonly stage = input.required<CatStage>();
   readonly pixelSize = input(8);
 
-  readonly pixels = computed(() => this.parseSprite(this.stage(), this.palette()));
-  readonly containerWidth = computed(() => {
-    const rows = STAGE_SPRITES[this.stage()].replace(/^\n/, '').replace(/\n$/, '').split('\n');
-    return Math.max(...rows.map(row => row.length)) * this.pixelSize();
-  });
-  readonly containerHeight = computed(() => {
-    const rows = STAGE_SPRITES[this.stage()].replace(/^\n/, '').replace(/\n$/, '').split('\n');
-    return rows.length * this.pixelSize();
-  });
+  private readonly rows = computed(() =>
+    STAGE_SPRITES[this.stage()].replace(/^\n/, '').replace(/\n$/, '').split('\n')
+  );
+  readonly containerWidth  = computed(() => Math.max(...this.rows().map(row => row.length)) * this.pixelSize());
+  readonly containerHeight = computed(() => this.rows().length * this.pixelSize());
+  readonly pixels = computed(() => this.parseSprite(this.rows(), this.palette()));
 
-  private parseSprite(stage: CatStage, paletteKey: CatPalette): Pixel[] {
-    const art = STAGE_SPRITES[stage];
+  private parseSprite(rows: string[], paletteKey: CatPalette): Pixel[] {
     const colorMap = buildPalette(paletteKey);
     const pixels: Pixel[] = [];
-    const rows = art.replace(/^\n/, '').replace(/\n$/, '').split('\n');
     rows.forEach((row, rowIndex) => {
       [...row].forEach((char, colIndex) => {
         if (char === '.' || char === ' ' || !char) return;

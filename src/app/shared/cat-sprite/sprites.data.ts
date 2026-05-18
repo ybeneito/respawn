@@ -37,7 +37,11 @@ const ACCESSORY_COLORS: Record<string, string> = {
 // Build a complete character→color map for a given palette
 export function buildPalette(paletteKey: CatPalette): Record<string, string> {
   const fur = FUR_PALETTES[paletteKey];
-  return { ...ACCESSORY_COLORS, ...fur };
+  return {
+    ...ACCESSORY_COLORS,
+    '1': fur['1'], '2': fur['2'], '3': fur['3'], '4': fur['4'],
+    E: fur.E, P: fur.P,
+  };
 }
 
 // Stage sprite art strings — copied exactly from design export
