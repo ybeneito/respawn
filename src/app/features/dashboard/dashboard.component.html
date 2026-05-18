@@ -31,7 +31,7 @@
 
   @if (profile(); as prof) {
     <app-xp-bar
-      [currentXp]="prof.xp"
+      [currentXp]="prof.xp + sessionXpDelta()"
       [xpForCurrentLevel]="prof.xpForCurrentLevel"
       [xpForNextLevel]="xpForNextLevel()" />
   }
@@ -46,7 +46,7 @@
       <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
     }
     @if (dashboard.todayActive.length === 0 && dashboard.todayDone.length === 0) {
-      <p class="vt empty-state">All quests done! 🎉</p>
+      <p class="vt empty-state">No quests scheduled for today.</p>
     }
   </div>
 

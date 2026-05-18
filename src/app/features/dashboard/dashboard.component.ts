@@ -31,10 +31,12 @@ export class DashboardComponent implements OnInit {
 
   readonly profile = computed(() => this.data()?.userProfile ?? null);
 
+  readonly sessionXpDelta = signal(0);
+
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
     if (!prof) return 0;
-    return prof.xpForCurrentLevel + prof.xpToNextLevel;
+    return prof.xp + prof.xpToNextLevel;
   });
 
   async ngOnInit() {
@@ -54,13 +56,12 @@ export class DashboardComponent implements OnInit {
     try {
       const result = await this.completeUseCase.execute(questId, new Date());
       this.xpEarned.set(result.xpEarned);
-      if (this.data()) {
-        this.data.update(prev => ({
-          ...prev!,
-          todayActive: prev!.todayActive.filter(quest => quest.id !== questId),
-          todayDone: [...prev!.todayDone, result.quest],
-        }));
-      }
+      this.sessionXpDelta.update(delta => delta + result.xpEarned);
+      this.data.update(prev => prev ? ({
+        ...prev,
+        todayActive: prev.todayActive.filter(quest => quest.id !== questId),
+        todayDone: [...prev.todayDone, result.quest],
+      }) : prev);
     } catch {
       this.completeError.set('Failed to complete quest. Please try again.');
     } finally {
