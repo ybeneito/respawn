@@ -11,9 +11,6 @@ export class QuestRowComponent {
   readonly quest = input.required<Quest>();
   readonly completed = output<string>(); // emits quest.id
 
-  readonly RARITY_LABEL: Record<string, string> = {
-    low: 'COMMON', med: 'UNCOMMON', hi: 'RARE', urg: 'EPIC',
-  };
   readonly XP_BY_RARITY: Record<string, number> = { low: 5, med: 15, hi: 35, urg: 80 };
   readonly DIAMONDS: Record<string, string> = { low: '◆', med: '◆◆', hi: '◆◆◆', urg: '◆◆◆◆' };
 }

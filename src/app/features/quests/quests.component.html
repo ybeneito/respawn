@@ -1,27 +1,37 @@
-<div class="screen-header">
-  <div>
-    <h2 class="pf">QUEST LOG</h2>
-    <p class="sk">{{ filtered().length }} quests</p>
+@if (loading()) {
+  <p class="sk loading-msg">Loading…</p>
+} @else if (errorMessage()) {
+  <p class="sk error-msg" role="alert">{{ errorMessage() }}</p>
+} @else {
+  <div class="screen-header">
+    <div>
+      <h2 class="pf">QUEST LOG</h2>
+      <p class="sk">{{ filtered().length }} quests</p>
+    </div>
+    <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
   </div>
-  <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
-</div>
 
-<div class="filter-chips">
-  @for (filterOption of (['all','today','active','done'] as const); track filterOption) {
-    <button class="pbtn sm" [class.ghost]="filter() !== filterOption" (click)="filter.set(filterOption)">
-      {{ filterOption === 'all' ? 'ALL' : filterOption === 'today' ? 'TODAY' : filterOption === 'active' ? 'ACTIVE' : 'DONE' }}
-    </button>
-  }
-</div>
+  <div class="filter-chips">
+    @for (filterOption of filterOptions; track filterOption) {
+      <button class="pbtn sm" [class.ghost]="filter() !== filterOption" (click)="filter.set(filterOption)">
+        {{ filterOption.toUpperCase() }}
+      </button>
+    }
+  </div>
 
-<div class="quest-list">
-  @for (quest of filtered(); track quest.id) {
-    <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
+  <div class="quest-list">
+    @for (quest of filtered(); track quest.id) {
+      <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
+    }
+    @empty {
+      <p class="vt empty-state">No quests here. Start one!</p>
+    }
+  </div>
+
+  @if (completeError()) {
+    <p class="sk error-msg" role="alert">{{ completeError() }}</p>
   }
-  @empty {
-    <p class="vt empty-state">No quests here. Start one!</p>
-  }
-</div>
+}
 
 @if (showModal()) {
   <app-create-quest-modal (questCreated)="onQuestCreated($event)" (closed)="showModal.set(false)" />
