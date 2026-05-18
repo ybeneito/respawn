@@ -1,1 +1,25 @@
-<router-outlet />
+@if (!isLoggedIn()) {
+  <router-outlet />
+} @else {
+  <div class="shell scanlines vignette">
+    <nav class="left-rail">
+      <div class="logo">
+        <span class="pf">RESPAWN</span>
+        <span class="sk tagline">9 LIVES · ONE DAY AT A TIME</span>
+      </div>
+      <ul class="nav-links">
+        <li><a routerLink="/dashboard" routerLinkActive="active" class="nav-item pf">DASHBOARD</a></li>
+        <li><a routerLink="/quests" routerLinkActive="active" class="nav-item pf">QUESTS</a></li>
+      </ul>
+      <button class="pbtn ghost sm new-quest-btn" routerLink="/quests">+ NEW QUEST</button>
+    </nav>
+
+    <main class="main-area">
+      <router-outlet />
+    </main>
+
+    <aside class="right-rail">
+      <p class="sk companion-label">COMPANION</p>
+    </aside>
+  </div>
+}
