@@ -12,5 +12,5 @@ export const routes: Routes = [
       { path: 'quests',    loadChildren: () => import('./features/quests/quests.routes').then(m => m.QUESTS_ROUTES) },
     ],
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: '' },
 ];
