@@ -1,10 +1,11 @@
 import { Injectable, OnDestroy, signal } from '@angular/core';
 import { Session, Subscription } from '@supabase/supabase-js';
 import { ICurrentUserPort } from '../../domain/auth/current-user.port';
+import { IAuthSessionPort } from '../../domain/auth/auth-session.port';
 import { supabase } from '../supabase/supabase.client';
 
 @Injectable({ providedIn: 'root' })
-export class SupabaseAuthService implements OnDestroy, ICurrentUserPort {
+export class SupabaseAuthService implements OnDestroy, ICurrentUserPort, IAuthSessionPort {
   readonly session = signal<Session | null>(null);
 
   private readonly authSubscription: Subscription;
@@ -17,6 +18,10 @@ export class SupabaseAuthService implements OnDestroy, ICurrentUserPort {
 
   ngOnDestroy(): void {
     this.authSubscription.unsubscribe();
+  }
+
+  isAuthenticated(): boolean {
+    return this.session() !== null;
   }
 
   getUserId(): string {
