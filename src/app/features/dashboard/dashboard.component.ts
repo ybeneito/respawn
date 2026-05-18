@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase, DashboardData } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
@@ -16,13 +16,15 @@ import { Quest } from '../../../domain/quest/quest.entity';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
   private readonly profileRepo = inject(PROFILE_REPOSITORY);
   private readonly currentUser = inject(CURRENT_USER);
   private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
+  private readonly pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
+  private xpToastTimerId: ReturnType<typeof setTimeout> | null = null;
 
   readonly loading = signal(true);
   readonly errorMessage = signal<string | null>(null);
@@ -62,11 +64,16 @@ export class DashboardComponent implements OnInit {
       const result = await this.completeUseCase.execute(questId, new Date());
       this.xpEarned.set(result.xpEarned);
       this.sessionXpDelta.update(delta => delta + result.xpEarned);
+      if (this.xpToastTimerId !== null) clearTimeout(this.xpToastTimerId);
       this.showXpToast.set(true);
-      setTimeout(() => this.showXpToast.set(false), 1200);
+      this.xpToastTimerId = setTimeout(() => {
+        this.showXpToast.set(false);
+        this.xpToastTimerId = null;
+      }, 1200);
       if (result.levelUp) {
         this.newLevel.set(result.newLevel ?? null);
-        setTimeout(() => this.showLevelUp.set(true), 400);
+        const levelUpTimer = setTimeout(() => this.showLevelUp.set(true), 400);
+        this.pendingTimeouts.push(levelUpTimer);
       }
       this.data.update(prev => prev ? ({
         ...prev,
@@ -78,6 +85,11 @@ export class DashboardComponent implements OnInit {
     } finally {
       this.inFlightQuestIds.delete(questId);
     }
+  }
+
+  ngOnDestroy() {
+    if (this.xpToastTimerId !== null) clearTimeout(this.xpToastTimerId);
+    this.pendingTimeouts.forEach(clearTimeout);
   }
 
   onQuestCreated(quest: Quest) {

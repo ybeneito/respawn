@@ -24,7 +24,7 @@
     </div>
     <div class="stat-block pbox notch-corners">
       <p class="sk label">XP TODAY</p>
-      <p class="pf value">+{{ xpEarned() }}</p>
+      <p class="pf value">+{{ sessionXpDelta() }}</p>
       <p class="sk caption">points earned</p>
     </div>
   </div>
@@ -61,6 +61,6 @@
 
 <app-xp-toast [xp]="xpEarned()" [visible]="showXpToast()" />
 
-@if (showLevelUp() && profile()) {
-  <app-level-up [profile]="profile()!" (continued)="showLevelUp.set(false)" />
+@if (showLevelUp() && profile() && newLevel()) {
+  <app-level-up [profile]="profile()!" [newLevel]="newLevel()!" (continued)="showLevelUp.set(false)" />
 }

@@ -11,8 +11,8 @@ import { UserProfile } from '../../../domain/profile/user-profile.entity';
 })
 export class LevelUpComponent {
   readonly profile = input.required<UserProfile>();
+  readonly newLevel = input.required<number>();
   readonly continued = output<void>();
 
   readonly stage = computed(() => this.profile().stage);
-  readonly level = computed(() => this.profile().level);
 }

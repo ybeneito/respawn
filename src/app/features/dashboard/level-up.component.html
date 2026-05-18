@@ -2,6 +2,6 @@
   <div class="rays"></div>
   <app-cat-sprite [palette]="profile().palette" [stage]="stage()" [pixelSize]="14" />
   <div class="banner pf">LEVEL UP!</div>
-  <div class="level-number pf">{{ level() }}</div>
+  <div class="level-number pf">{{ newLevel() }}</div>
   <button class="pbtn amber" (click)="continued.emit()">CONTINUE RUN →</button>
 </div>
