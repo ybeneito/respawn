@@ -13,7 +13,7 @@ const currentUser: ICurrentUserPort = { getUserId: () => USER_ID };
 const makeQuest = () => new Quest('q1', USER_ID, 'Test', 'todo', 'hi', 'work', true, null, new Date());
 const makeProfile = () => new UserProfile(USER_ID, 'cat', null, 'orange', 0, 1, 9, new Streak(3, 3, new Date(Date.now() - 86_400_000)), new Date());
 
-const makeRepos = (quest: Quest, profile: UserProfile) => ({
+const makeRepos = (quest: Quest | null, profile: UserProfile | null) => ({
   questRepo: {
     findByIdForUser: vi.fn().mockResolvedValue(quest),
     save: vi.fn().mockImplementation(async (q: Quest) => q),
@@ -24,6 +24,7 @@ const makeRepos = (quest: Quest, profile: UserProfile) => ({
     findById: vi.fn().mockResolvedValue(profile),
     save: vi.fn().mockImplementation(async (p: UserProfile) => p),
     create: vi.fn(),
+    updatePalette: vi.fn(),
   } satisfies IUserProfileRepository,
 });
 
@@ -56,5 +57,33 @@ describe('CompleteQuestUseCase', () => {
     const useCase = new CompleteQuestUseCase(questRepo, profileRepo, currentUser);
 
     await expect(useCase.execute('q1', new Date())).rejects.toThrow('already completed');
+  });
+
+  it('throws if quest not found', async () => {
+    const { questRepo, profileRepo } = makeRepos(null, makeProfile());
+    const useCase = new CompleteQuestUseCase(questRepo, profileRepo, currentUser);
+
+    await expect(useCase.execute('q1', new Date())).rejects.toThrow('not found');
+  });
+
+  it('throws if profile not found', async () => {
+    const { questRepo, profileRepo } = makeRepos(makeQuest(), null);
+    const useCase = new CompleteQuestUseCase(questRepo, profileRepo, currentUser);
+
+    await expect(useCase.execute('q1', new Date())).rejects.toThrow('not found');
+  });
+
+  it('loses a life when streak is broken', async () => {
+    const brokenStreakProfile = new UserProfile(
+      USER_ID, 'cat', null, 'orange', 0, 1, 9,
+      new Streak(3, 3, new Date(Date.now() - 2 * 86_400_000)),
+      new Date(),
+    );
+    const { questRepo, profileRepo } = makeRepos(makeQuest(), brokenStreakProfile);
+    const useCase = new CompleteQuestUseCase(questRepo, profileRepo, currentUser);
+    const result = await useCase.execute('q1', new Date());
+
+    expect(result.livesLost).toBe(true);
+    expect(result.profile.lives).toBe(8);
   });
 });

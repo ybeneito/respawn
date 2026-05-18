@@ -30,4 +30,9 @@ describe('CreateQuestUseCase', () => {
     const useCase = new CreateQuestUseCase(mockRepo, currentUser);
     expect(() => useCase.execute({ title: '   ', rarity: 'low', tag: 'home', today: true })).toThrow();
   });
+
+  it('throws if title exceeds max length', () => {
+    const useCase = new CreateQuestUseCase(mockRepo, currentUser);
+    expect(() => useCase.execute({ title: 'a'.repeat(256), rarity: 'low', tag: 'home', today: true })).toThrow();
+  });
 });
