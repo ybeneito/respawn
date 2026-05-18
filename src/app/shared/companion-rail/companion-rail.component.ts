@@ -26,7 +26,7 @@ export class CompanionRailComponent {
 
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
-    return prof ? prof.xp + prof.xpToNextLevel : 0;
+    return prof ? prof.xpForNextLevel : 0;
   });
 
   readonly heartsArray = computed(() => {

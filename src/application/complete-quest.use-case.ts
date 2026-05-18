@@ -35,18 +35,7 @@ export class CompleteQuestUseCase {
     const { streak: newStreak, broken } = profile.streak.evaluate(today);
     const { quest: completedQuest, xpEarned } = quest.complete(newStreak.current);
 
-    const profileWithStreak = new UserProfile(
-      profile.userId,
-      profile.username,
-      profile.avatarUrl,
-      profile.palette,
-      profile.xp,
-      profile.level,
-      profile.lives,
-      newStreak,
-      profile.createdAt,
-    );
-    const { profile: finalProfile, levelUp } = profileWithStreak.applyXP(xpEarned, broken);
+    const { profile: finalProfile, levelUp } = profile.withStreak(newStreak).applyXP(xpEarned, broken);
 
     await this.questRepo.save(completedQuest);
     await this.profileRepo.save(finalProfile);

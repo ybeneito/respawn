@@ -61,4 +61,15 @@ export class UserProfile {
   get xpForCurrentLevel(): number {
     return xpForLevel(this.level);
   }
+
+  get xpForNextLevel(): number {
+    return this.xp + this.xpToNextLevel;
+  }
+
+  withStreak(streak: Streak): UserProfile {
+    return new UserProfile(
+      this.userId, this.username, this.avatarUrl, this.palette,
+      this.xp, this.level, this.lives, streak, this.createdAt,
+    );
+  }
 }

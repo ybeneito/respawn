@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
     if (!prof) return 0;
-    return prof.xp + prof.xpToNextLevel;
+    return prof.xpForNextLevel;
   });
 
   async ngOnInit() {
