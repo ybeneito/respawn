@@ -1,5 +1,23 @@
 import { CatPalette, CatStage } from '../../../domain/profile/user-profile.entity';
 
+export interface StageInfo {
+  label: string;
+  blurb: string;
+  minLevel: number;
+  maxLevel: number;
+}
+
+export const STAGE_INFO: Record<CatStage, StageInfo> = {
+  kitten:    { label: 'KITTEN',    blurb: 'tiny, curious, full of beans',                  minLevel: 1,  maxLevel: 3   },
+  stray:     { label: 'STRAY',     blurb: 'street-smart, scrappy, knows every alley',       minLevel: 4,  maxLevel: 7   },
+  ninja:     { label: 'NINJA',     blurb: 'shadows, silence, perfect form',                 minLevel: 8,  maxLevel: 12  },
+  samurai:   { label: 'SAMURAI',   blurb: 'one strike, no mistakes, code of honor',         minLevel: 13, maxLevel: 18  },
+  arcane:    { label: 'ARCANE',    blurb: 'orb in paw, runes humming, robes flowing',       minLevel: 19, maxLevel: 25  },
+  legendary: { label: 'LEGENDARY', blurb: 'cosmic crown, nine lives squared',               minLevel: 26, maxLevel: 999 },
+};
+
+export const STAGE_ORDER: CatStage[] = ['kitten', 'stray', 'ninja', 'samurai', 'arcane', 'legendary'];
+
 // Fur palette definitions — per-palette fur/eye/nose colors
 const FUR_PALETTES: Record<CatPalette, { '1': string; '2': string; '3': string; '4': string; E: string; P: string }> = {
   orange:  { '1': '#ffce7e', '2': '#f59940', '3': '#c66520', '4': '#7a3a10', E: '#7ed87a', P: '#ff9fb5' },

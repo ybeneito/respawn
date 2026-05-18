@@ -12,6 +12,7 @@ export interface CompleteQuestResult {
   newLevel: number;
   streak: Streak;
   livesLost: boolean;
+  profile: UserProfile;
 }
 
 export class CompleteQuestUseCase {
@@ -57,6 +58,7 @@ export class CompleteQuestUseCase {
       newLevel: finalProfile.level,
       streak: newStreak,
       livesLost: broken,
+      profile: finalProfile,
     };
   }
 }

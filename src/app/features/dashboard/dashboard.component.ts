@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit, OnDestroy, ChangeDetection
 import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase, DashboardData } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
+import { ProfileStateService } from '../../core/profile-state.service';
 import { CreateQuestModalComponent } from '../quests/create-quest-modal/create-quest-modal.component';
 import { QuestRowComponent } from '../quests/quest-row.component';
 import { XpBarComponent } from '../../shared/xp-bar/xp-bar.component';
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
   private readonly profileRepo = inject(PROFILE_REPOSITORY);
   private readonly currentUser = inject(CURRENT_USER);
+  private readonly profileState = inject(ProfileStateService);
   private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
@@ -48,7 +50,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     try {
-      this.data.set(await this.dashboardUseCase.execute());
+      const dashboard = await this.dashboardUseCase.execute();
+      this.data.set(dashboard);
+      this.profileState.profile.set(dashboard.userProfile);
     } catch {
       this.errorMessage.set('Failed to load dashboard. Please refresh.');
     } finally {
@@ -75,8 +79,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const levelUpTimer = setTimeout(() => this.showLevelUp.set(true), 400);
         this.pendingTimeouts.push(levelUpTimer);
       }
+      this.profileState.profile.set(result.profile);
       this.data.update(prev => prev ? ({
         ...prev,
+        userProfile: result.profile,
         todayActive: prev.todayActive.filter(quest => quest.id !== questId),
         todayDone: [...prev.todayDone, result.quest],
       }) : prev);

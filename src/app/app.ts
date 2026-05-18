@@ -1,13 +1,14 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.service';
+import { CompanionRailComponent } from './shared/companion-rail/companion-rail.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CompanionRailComponent],
 })
 export class App {
   private readonly auth = inject(SupabaseAuthService);

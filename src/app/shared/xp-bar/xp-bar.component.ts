@@ -10,6 +10,7 @@ export class XpBarComponent {
   readonly currentXp = input.required<number>();
   readonly xpForCurrentLevel = input.required<number>();
   readonly xpForNextLevel = input.required<number>();
+  readonly showLabel = input(true);
 
   readonly fillPercent = computed(() => {
     const range = this.xpForNextLevel() - this.xpForCurrentLevel();
