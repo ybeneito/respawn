@@ -1,0 +1,38 @@
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-void);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-card h1 {
+  color: var(--acc-purple);
+  font-size: 20px;
+  margin: 0;
+}
+
+.auth-card .sk {
+  color: var(--text-mut);
+  font-size: 9px;
+  margin: 0;
+}
+
+.pinput {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error {
+  color: var(--acc-red, #e05050);
+  margin: 0;
+}

@@ -1,0 +1,24 @@
+<div class="auth-shell">
+  <div class="auth-card pbox notch-corners">
+    <h1 class="pf">RESPAWN</h1>
+    <p class="sk">9 LIVES · ONE DAY AT A TIME</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <input class="pinput" type="email" formControlName="email" placeholder="email">
+      <input class="pinput" type="password" formControlName="password" placeholder="password">
+      @if (error()) {
+        <p class="error sk">{{ error() }}</p>
+      }
+      <button class="pbtn teal" type="submit" [disabled]="loading()">
+        @if (loading()) { <span>LOADING…</span> }
+        @else if (isSignUp()) { <span>CREATE ACCOUNT</span> }
+        @else { <span>SIGN IN</span> }
+      </button>
+    </form>
+
+    <button class="pbtn ghost" type="button" (click)="toggle()">
+      @if (isSignUp()) { <span>I ALREADY HAVE AN ACCOUNT</span> }
+      @else { <span>CREATE AN ACCOUNT</span> }
+    </button>
+  </div>
+</div>
