@@ -10,4 +10,5 @@ export interface IUserProfileRepository {
   findById(userId: string): Promise<UserProfile | null>;
   save(profile: UserProfile): Promise<UserProfile>;
   create(dto: CreateProfileDto): Promise<UserProfile>;
+  updatePalette(userId: string, palette: CatPalette): Promise<void>;
 }

@@ -1,5 +1,5 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.service';
 
 @Component({
@@ -11,5 +11,11 @@ import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.servic
 })
 export class App {
   private readonly auth = inject(SupabaseAuthService);
+  private readonly router = inject(Router);
   readonly isLoggedIn = computed(() => !!this.auth.session());
+
+  async signOut(): Promise<void> {
+    await this.auth.signOut();
+    this.router.navigate(['/auth']);
+  }
 }

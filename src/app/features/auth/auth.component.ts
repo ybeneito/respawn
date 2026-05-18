@@ -30,11 +30,12 @@ export class AuthComponent {
     this.error.set(null);
     try {
       const { email, password } = this.form.value as { email: string; password: string };
-      const { error } = await (this.isSignUp()
+      const isSignUp = this.isSignUp();
+      const { error } = await (isSignUp
         ? this.auth.signUp(email, password)
         : this.auth.signIn(email, password));
       if (error) { this.error.set(error.message); return; }
-      this.router.navigate(['/dashboard']);
+      this.router.navigate([isSignUp ? '/onboarding' : '/dashboard']);
     } catch {
       this.error.set('An unexpected error occurred. Please try again.');
     } finally {

@@ -11,7 +11,7 @@
         <li><a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf">DASHBOARD</a></li>
         <li><a routerLink="/quests" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf">QUESTS</a></li>
       </ul>
-      <button class="pbtn ghost sm new-quest-btn" routerLink="/quests">+ NEW QUEST</button>
+      <button class="pbtn ghost sm signout-btn" (click)="signOut()">SIGN OUT</button>
     </nav>
 
     <main class="main-area">

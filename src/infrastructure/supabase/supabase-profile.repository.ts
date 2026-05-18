@@ -35,6 +35,14 @@ export class SupabaseProfileRepository implements IUserProfileRepository {
     return this.toEntity(data);
   }
 
+  async updatePalette(userId: string, palette: CatPalette): Promise<void> {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ palette })
+      .eq('id', userId);
+    if (error) throw error;
+  }
+
   async create(dto: CreateProfileDto): Promise<UserProfile> {
     const { data, error } = await supabase
       .from('profiles')

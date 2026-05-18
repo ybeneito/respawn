@@ -1,0 +1,29 @@
+<div class="onboarding-shell">
+  <div class="onboarding-card pbox notch-corners">
+    <h1 class="pf">CHOOSE YOUR COMPANION</h1>
+    <p class="sk">YOUR CAT. YOUR JOURNEY.</p>
+
+    <div class="palette-grid">
+      @for (palette of palettes; track palette) {
+        <button
+          class="palette-option"
+          [class.selected]="selected() === palette"
+          (click)="select(palette)"
+          [attr.aria-pressed]="selected() === palette"
+          [attr.aria-label]="palette + ' cat'"
+        >
+          <app-cat-sprite [palette]="palette" stage="kitten" [pixelSize]="6" />
+          <span class="palette-name sk">{{ palette }}</span>
+        </button>
+      }
+    </div>
+
+    @if (error()) {
+      <p class="error sk">{{ error() }}</p>
+    }
+
+    <app-pixel-button variant="teal" [disabled]="loading()" (click)="confirm()">
+      @if (loading()) { SAVING… } @else { START ADVENTURE }
+    </app-pixel-button>
+  </div>
+</div>
