@@ -3,15 +3,12 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith } from 'rxjs/operators';
 import { QUEST_REPOSITORY, CURRENT_USER } from '../../../core/di-tokens';
-import { CreateQuestUseCase } from '../../../../application/create-quest.use-case';
-import { Quest, QuestRarity, QuestTag } from '../../../../domain/quest/quest.entity';
+import { CreateQuestUseCase, QUEST_TITLE_MAX_LENGTH } from '../../../../application/create-quest.use-case';
+import { Quest, QuestRarity, QuestTag, RARITY_META, RarityMeta } from '../../../../domain/quest/quest.entity';
 
-const RARITIES: { value: QuestRarity; label: string; xp: number; diamonds: number }[] = [
-  { value: 'low', label: 'COMMON',   xp: 5,  diamonds: 1 },
-  { value: 'med', label: 'UNCOMMON', xp: 15, diamonds: 2 },
-  { value: 'hi',  label: 'RARE',     xp: 35, diamonds: 3 },
-  { value: 'urg', label: 'EPIC',     xp: 80, diamonds: 4 },
-];
+const RARITIES: ({ value: QuestRarity } & RarityMeta)[] = (
+  Object.entries(RARITY_META) as [QuestRarity, RarityMeta][]
+).map(([value, meta]) => ({ value, ...meta }));
 
 const TAGS: { value: QuestTag; label: string }[] = [
   { value: 'work',       label: 'Work' },
@@ -44,7 +41,7 @@ export class CreateQuestModalComponent {
   readonly tags = TAGS;
 
   readonly form = this.fb.group({
-    title: ['', [Validators.required, Validators.maxLength(100)]],
+    title: ['', [Validators.required, Validators.maxLength(QUEST_TITLE_MAX_LENGTH)]],
     tag: ['work' as QuestTag],
   });
 
@@ -64,7 +61,8 @@ export class CreateQuestModalComponent {
   }
 
   nextStep() {
-    if (this.form.get('title')?.invalid) return;
+    const title = this.form.value.title?.trim() ?? '';
+    if (!title || this.form.get('title')?.invalid) return;
     this.step.set(2);
   }
 

@@ -2,11 +2,17 @@ export type QuestRarity = 'low' | 'med' | 'hi' | 'urg';
 export type QuestStatus = 'todo' | 'in_progress' | 'done';
 export type QuestTag = 'work' | 'health' | 'learn' | 'home' | 'side-quest';
 
-const XP_BY_RARITY: Record<QuestRarity, number> = {
-  low: 5,
-  med: 15,
-  hi: 35,
-  urg: 80,
+export interface RarityMeta {
+  xp: number;
+  diamonds: number;
+  label: string;
+}
+
+export const RARITY_META: Record<QuestRarity, RarityMeta> = {
+  low: { xp: 5,  diamonds: 1, label: 'COMMON'   },
+  med: { xp: 15, diamonds: 2, label: 'UNCOMMON'  },
+  hi:  { xp: 35, diamonds: 3, label: 'RARE'      },
+  urg: { xp: 80, diamonds: 4, label: 'EPIC'      },
 };
 
 export class Quest {
@@ -23,7 +29,7 @@ export class Quest {
   ) {}
 
   complete(streakDays = 0): { quest: Quest; xpEarned: number } {
-    const base = XP_BY_RARITY[this.rarity];
+    const base = RARITY_META[this.rarity].xp;
     const bonus = Math.min(streakDays * 0.1, 1.0);
     const xpEarned = Math.round(base * (1 + bonus));
     return {

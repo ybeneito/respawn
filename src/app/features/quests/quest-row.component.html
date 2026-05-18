@@ -4,13 +4,13 @@
     [attr.aria-label]="'Complete: ' + quest().title">
     @if (quest().status === 'done') { ✓ }
   </button>
-  <span class="diamonds sk">{{ DIAMONDS[quest().rarity] }}</span>
+  <span class="diamonds sk">{{ diamondChars[quest().rarity] }}</span>
   <div class="quest-info">
     <span class="vt title">{{ quest().title }}</span>
     <span class="tag sk">{{ quest().tag }}</span>
   </div>
   <div class="xp sk">
     <span class="coin">🪙</span>
-    +{{ XP_BY_RARITY[quest().rarity] }}
+    +{{ rarityMeta[quest().rarity].xp }}
   </div>
 </div>
