@@ -1,4 +1,4 @@
-<div class="pprog" role="progressbar" [attr.aria-valuenow]="currentXp()" [attr.aria-valuemax]="xpForNextLevel()">
+<div class="pprog" role="progressbar" [attr.aria-valuenow]="currentXp()" [attr.aria-valuemin]="xpForCurrentLevel()" [attr.aria-valuemax]="xpForNextLevel()">
   <div class="pprog-fill" [style.width.%]="fillPercent()"></div>
 </div>
 <p class="sk xp-label">XP TO NEXT LEVEL: {{ xpForNextLevel() - currentXp() }}</p>

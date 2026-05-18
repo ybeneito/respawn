@@ -13,6 +13,7 @@ export class XpBarComponent {
 
   readonly fillPercent = computed(() => {
     const range = this.xpForNextLevel() - this.xpForCurrentLevel();
+    if (range <= 0) return 0;
     const progress = this.currentXp() - this.xpForCurrentLevel();
     return Math.min(100, Math.max(0, (progress / range) * 100));
   });

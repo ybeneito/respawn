@@ -4,7 +4,7 @@ type ButtonVariant = 'purple' | 'teal' | 'amber' | 'ghost';
 
 @Component({
   selector: 'app-pixel-button',
-  template: `<button class="pbtn" [class]="variant()" [disabled]="disabled()"><ng-content /></button>`,
+  template: `<button [class]="'pbtn ' + variant()" [disabled]="disabled()"><ng-content /></button>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PixelButtonComponent {
