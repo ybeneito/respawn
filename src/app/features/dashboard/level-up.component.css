@@ -1,0 +1,31 @@
+.levelup-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-void);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  z-index: 300;
+}
+
+.rays {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ray-rotate 12s linear infinite;
+}
+
+.banner {
+  font-size: 28px;
+  color: var(--acc-amber);
+}
+
+.level-number {
+  font-size: 64px;
+  color: var(--text-hi);
+  text-shadow: 4px 4px 0 var(--acc-purple), 8px 8px 0 rgba(0, 0, 0, 0.5);
+}

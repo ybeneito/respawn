@@ -58,3 +58,9 @@
 @if (showModal()) {
   <app-create-quest-modal (questCreated)="onQuestCreated($event)" (closed)="showModal.set(false)" />
 }
+
+<app-xp-toast [xp]="xpEarned()" [visible]="showXpToast()" />
+
+@if (showLevelUp() && profile()) {
+  <app-level-up [profile]="profile()!" (continued)="showLevelUp.set(false)" />
+}

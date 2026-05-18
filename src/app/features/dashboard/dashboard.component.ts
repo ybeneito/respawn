@@ -5,6 +5,8 @@ import { CompleteQuestUseCase } from '../../../application/complete-quest.use-ca
 import { CreateQuestModalComponent } from '../quests/create-quest-modal/create-quest-modal.component';
 import { QuestRowComponent } from '../quests/quest-row.component';
 import { XpBarComponent } from '../../shared/xp-bar/xp-bar.component';
+import { XpToastComponent } from './xp-toast.component';
+import { LevelUpComponent } from './level-up.component';
 import { Quest } from '../../../domain/quest/quest.entity';
 
 @Component({
@@ -12,7 +14,7 @@ import { Quest } from '../../../domain/quest/quest.entity';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent],
+  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent],
 })
 export class DashboardComponent implements OnInit {
   private readonly questRepo = inject(QUEST_REPOSITORY);
@@ -28,6 +30,9 @@ export class DashboardComponent implements OnInit {
   readonly data = signal<DashboardData | null>(null);
   readonly showModal = signal(false);
   readonly xpEarned = signal(0);
+  readonly showLevelUp = signal(false);
+  readonly showXpToast = signal(false);
+  readonly newLevel = signal<number | null>(null);
 
   readonly profile = computed(() => this.data()?.userProfile ?? null);
 
@@ -57,6 +62,12 @@ export class DashboardComponent implements OnInit {
       const result = await this.completeUseCase.execute(questId, new Date());
       this.xpEarned.set(result.xpEarned);
       this.sessionXpDelta.update(delta => delta + result.xpEarned);
+      this.showXpToast.set(true);
+      setTimeout(() => this.showXpToast.set(false), 1200);
+      if (result.levelUp) {
+        this.newLevel.set(result.newLevel ?? null);
+        setTimeout(() => this.showLevelUp.set(true), 400);
+      }
       this.data.update(prev => prev ? ({
         ...prev,
         todayActive: prev.todayActive.filter(quest => quest.id !== questId),
