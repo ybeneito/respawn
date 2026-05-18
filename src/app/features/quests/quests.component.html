@@ -1,0 +1,28 @@
+<div class="screen-header">
+  <div>
+    <h2 class="pf">QUEST LOG</h2>
+    <p class="sk">{{ filtered().length }} quests</p>
+  </div>
+  <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
+</div>
+
+<div class="filter-chips">
+  @for (filterOption of (['all','today','active','done'] as const); track filterOption) {
+    <button class="pbtn sm" [class.ghost]="filter() !== filterOption" (click)="filter.set(filterOption)">
+      {{ filterOption === 'all' ? 'ALL' : filterOption === 'today' ? 'TODAY' : filterOption === 'active' ? 'ACTIVE' : 'DONE' }}
+    </button>
+  }
+</div>
+
+<div class="quest-list">
+  @for (quest of filtered(); track quest.id) {
+    <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
+  }
+  @empty {
+    <p class="vt empty-state">No quests here. Start one!</p>
+  }
+</div>
+
+@if (showModal()) {
+  <app-create-quest-modal (questCreated)="onQuestCreated($event)" (closed)="showModal.set(false)" />
+}

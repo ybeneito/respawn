@@ -1,0 +1,78 @@
+.quest-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  transition: opacity 200ms ease;
+}
+
+.quest-row.done {
+  opacity: 0.5;
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-dim);
+  background: transparent;
+  cursor: pointer;
+  color: var(--acc-teal);
+  font-size: 12px;
+}
+
+.checkbox.checked {
+  background: var(--acc-teal);
+  border-color: var(--acc-teal);
+  color: var(--bg-void);
+}
+
+.checkbox:disabled { cursor: default; }
+
+.diamonds {
+  color: var(--acc-amber);
+  font-size: 10px;
+  flex-shrink: 0;
+  min-width: 36px;
+}
+
+.quest-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 16px;
+  color: var(--text-hi);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quest-row.done .title {
+  text-decoration: line-through;
+  color: var(--text-mut);
+}
+
+.tag {
+  font-size: 9px;
+  color: var(--text-mut);
+  text-transform: uppercase;
+}
+
+.xp {
+  flex-shrink: 0;
+  color: var(--acc-amber);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.coin { font-size: 12px; }
