@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
 import { UserProfile, CatPalette } from '../../domain/profile/user-profile.entity';
 import { Streak } from '../../domain/profile/streak.entity';
 import { CreateProfileDto, IUserProfileRepository } from '../../domain/profile/profile.repository';
 import { supabase } from './supabase.client';
 
-@Injectable({ providedIn: 'root' })
 export class SupabaseProfileRepository implements IUserProfileRepository {
   async findById(userId: string): Promise<UserProfile | null> {
     const { data, error } = await supabase

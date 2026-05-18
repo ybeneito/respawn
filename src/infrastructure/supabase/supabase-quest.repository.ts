@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Quest, QuestRarity, QuestStatus, QuestTag } from '../../domain/quest/quest.entity';
 import { CreateQuestDto, IQuestRepository } from '../../domain/quest/quest.repository';
 import { supabase } from './supabase.client';
 
-@Injectable({ providedIn: 'root' })
 export class SupabaseQuestRepository implements IQuestRepository {
   async findByUser(userId: string): Promise<Quest[]> {
     const { data, error } = await supabase
