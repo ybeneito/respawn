@@ -31,7 +31,7 @@
 
   @if (profile(); as prof) {
     <app-xp-bar
-      [currentXp]="prof.xp + sessionXpDelta()"
+      [currentXp]="prof.xp"
       [xpForCurrentLevel]="prof.xpForCurrentLevel"
       [xpForNextLevel]="xpForNextLevel()" />
   }
