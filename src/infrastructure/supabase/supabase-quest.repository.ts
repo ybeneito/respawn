@@ -15,11 +15,12 @@ export class SupabaseQuestRepository implements IQuestRepository {
     return (data ?? []).map(this.toEntity);
   }
 
-  async findById(id: string): Promise<Quest | null> {
+  async findByIdForUser(questId: string, userId: string): Promise<Quest | null> {
     const { data, error } = await supabase
       .from('quests')
       .select('*')
-      .eq('id', id)
+      .eq('id', questId)
+      .eq('owner_id', userId)
       .single();
     if (error?.code === 'PGRST116') return null;
     if (error) throw error;

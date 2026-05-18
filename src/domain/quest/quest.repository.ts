@@ -10,7 +10,7 @@ export interface CreateQuestDto {
 
 export interface IQuestRepository {
   findByUser(userId: string): Promise<Quest[]>;
-  findById(id: string): Promise<Quest | null>;
+  findByIdForUser(questId: string, userId: string): Promise<Quest | null>;
   save(quest: Quest): Promise<Quest>;
   create(dto: CreateQuestDto): Promise<Quest>;
 }

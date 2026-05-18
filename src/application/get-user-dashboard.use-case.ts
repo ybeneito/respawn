@@ -2,6 +2,7 @@ import { Quest } from '../domain/quest/quest.entity';
 import { UserProfile } from '../domain/profile/user-profile.entity';
 import { IQuestRepository } from '../domain/quest/quest.repository';
 import { IUserProfileRepository } from '../domain/profile/profile.repository';
+import { ICurrentUserPort } from '../domain/auth/current-user.port';
 
 export interface DashboardData {
   userProfile: UserProfile;
@@ -14,14 +15,18 @@ export class GetUserDashboardUseCase {
   constructor(
     private readonly questRepo: IQuestRepository,
     private readonly profileRepo: IUserProfileRepository,
+    private readonly currentUser: ICurrentUserPort,
   ) {}
 
-  async execute(userId: string): Promise<DashboardData> {
+  async execute(): Promise<DashboardData> {
+    const userId = this.currentUser.getUserId();
+
     const [allQuests, userProfile] = await Promise.all([
       this.questRepo.findByUser(userId),
       this.profileRepo.findById(userId),
     ]);
-    if (!userProfile) throw new Error(`Profile ${userId} not found`);
+    if (!userProfile) throw new Error(`Profile ${userId} not found.`);
+
     const todayQuests = allQuests.filter(quest => quest.today);
     return {
       userProfile,
