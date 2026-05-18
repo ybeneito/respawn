@@ -1,0 +1,60 @@
+@if (loading()) {
+  <p class="sk loading-msg">Loading…</p>
+} @else if (errorMessage()) {
+  <p class="sk error-msg" role="alert">{{ errorMessage() }}</p>
+} @else if (data(); as dashboard) {
+  <div class="screen-header">
+    <div>
+      <h2 class="pf">DASHBOARD</h2>
+      <p class="vt">Day {{ dashboard.userProfile.streak.current }} streak 🔥</p>
+    </div>
+    <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
+  </div>
+
+  <div class="stat-blocks">
+    <div class="stat-block pbox notch-corners">
+      <p class="sk label">TODAY</p>
+      <p class="pf value">{{ dashboard.todayDone.length }}/{{ dashboard.todayActive.length + dashboard.todayDone.length }}</p>
+      <p class="sk caption">quests done</p>
+    </div>
+    <div class="stat-block pbox notch-corners">
+      <p class="sk label">STREAK</p>
+      <p class="pf value">{{ dashboard.userProfile.streak.current }}d</p>
+      <p class="sk caption">don't break it</p>
+    </div>
+    <div class="stat-block pbox notch-corners">
+      <p class="sk label">XP TODAY</p>
+      <p class="pf value">+{{ xpEarned() }}</p>
+      <p class="sk caption">points earned</p>
+    </div>
+  </div>
+
+  @if (profile(); as prof) {
+    <app-xp-bar
+      [currentXp]="prof.xp"
+      [xpForCurrentLevel]="prof.xpForCurrentLevel"
+      [xpForNextLevel]="xpForNextLevel()" />
+  }
+
+  <h3 class="pf section-title">TODAY'S QUESTS</h3>
+
+  <div class="quest-list">
+    @for (quest of dashboard.todayActive; track quest.id) {
+      <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
+    }
+    @for (quest of dashboard.todayDone; track quest.id) {
+      <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
+    }
+    @if (dashboard.todayActive.length === 0 && dashboard.todayDone.length === 0) {
+      <p class="vt empty-state">All quests done! 🎉</p>
+    }
+  </div>
+
+  @if (completeError()) {
+    <p class="sk error-msg" role="alert">{{ completeError() }}</p>
+  }
+}
+
+@if (showModal()) {
+  <app-create-quest-modal (questCreated)="onQuestCreated($event)" (closed)="showModal.set(false)" />
+}
