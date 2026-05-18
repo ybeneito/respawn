@@ -1,5 +1,7 @@
-import { Component, inject, signal, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, output, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, startWith } from 'rxjs/operators';
 import { QUEST_REPOSITORY, CURRENT_USER } from '../../../core/di-tokens';
 import { CreateQuestUseCase } from '../../../../application/create-quest.use-case';
 import { Quest, QuestRarity, QuestTag } from '../../../../domain/quest/quest.entity';
@@ -37,6 +39,7 @@ export class CreateQuestModalComponent {
 
   readonly step = signal<1 | 2>(1);
   readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
   readonly rarities = RARITIES;
   readonly tags = TAGS;
 
@@ -45,7 +48,20 @@ export class CreateQuestModalComponent {
     tag: ['work' as QuestTag],
   });
 
-  get titleLength() { return this.form.get('title')?.value?.length ?? 0; }
+  readonly titleLength = toSignal(
+    this.form.controls.title.valueChanges.pipe(
+      map(value => value?.length ?? 0),
+      startWith(0),
+    ),
+    { initialValue: 0 }
+  );
+
+  get tagControl() { return this.form.controls.tag; }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closed.emit();
+  }
 
   nextStep() {
     if (this.form.get('title')?.invalid) return;
@@ -54,16 +70,17 @@ export class CreateQuestModalComponent {
 
   async selectRarity(rarity: QuestRarity) {
     this.loading.set(true);
+    this.errorMessage.set(null);
     try {
       const quest = await this.useCase.execute({
-        title: this.form.value.title!,
+        title: this.form.value.title?.trim() ?? '',
         rarity,
         tag: this.form.value.tag as QuestTag,
         today: true,
       });
       this.questCreated.emit(quest);
     } catch {
-      // error is surfaced through the loading state reset
+      this.errorMessage.set('Failed to save quest. Please try again.');
     } finally {
       this.loading.set(false);
     }

@@ -46,7 +46,7 @@
   height: 100%;
   width: 50%;
   background: var(--acc-teal, var(--acc-purple));
-  transition: width 100ms steps(4);
+  transition: width 150ms ease;
 }
 
 .step-fill.full { width: 100%; }
@@ -101,3 +101,5 @@
   color: var(--acc-amber);
   font-size: 9px;
 }
+
+.error-msg { color: var(--acc-red, #e05050); font-size: 10px; text-align: center; }
