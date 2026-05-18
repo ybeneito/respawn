@@ -4,8 +4,8 @@
     <p class="sk">9 LIVES · ONE DAY AT A TIME</p>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <input class="pinput" type="email" formControlName="email" placeholder="email">
-      <input class="pinput" type="password" formControlName="password" placeholder="password">
+      <input class="pinput" type="email" formControlName="email" placeholder="email" aria-label="Email">
+      <input class="pinput" type="password" formControlName="password" placeholder="password" aria-label="Password">
       @if (error()) {
         <p class="error sk">{{ error() }}</p>
       }

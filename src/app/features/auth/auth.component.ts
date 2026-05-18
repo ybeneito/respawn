@@ -28,13 +28,19 @@ export class AuthComponent {
     if (this.form.invalid) return;
     this.loading.set(true);
     this.error.set(null);
-    const { email, password } = this.form.value as { email: string; password: string };
-    const fn = this.isSignUp() ? this.auth.signUp(email, password) : this.auth.signIn(email, password);
-    const { error } = await fn;
-    this.loading.set(false);
-    if (error) { this.error.set(error.message); return; }
-    this.router.navigate(['/dashboard']);
+    try {
+      const { email, password } = this.form.value as { email: string; password: string };
+      const { error } = await (this.isSignUp()
+        ? this.auth.signUp(email, password)
+        : this.auth.signIn(email, password));
+      if (error) { this.error.set(error.message); return; }
+      this.router.navigate(['/dashboard']);
+    } catch {
+      this.error.set('An unexpected error occurred. Please try again.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
-  toggle() { this.isSignUp.update(v => !v); }
+  toggle() { this.isSignUp.update(currentValue => !currentValue); }
 }
