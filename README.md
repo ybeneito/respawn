@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/respawn-logo.svg" alt="Respawn" width="660">
+</p>
+
 # RESPAWN
 
 > 9 LIVES · 1 DAY AT A TIME
