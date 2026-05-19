@@ -69,7 +69,20 @@
     "continue": "CONTINUER →",
     "chooseRarity": "CHOISIR LA RARETÉ",
     "selectRarityAriaLabel": "Sélectionner la rareté {{ rarity }}",
-    "saveError": "Impossible de sauvegarder la quête. Réessaie."
+    "saveError": "Impossible de sauvegarder la quête. Réessaie.",
+    "rarity": {
+      "low": "COMMUN",
+      "med": "PEU COMMUN",
+      "hi": "RARE",
+      "urg": "ÉPIQUE"
+    },
+    "tags": {
+      "work": "Travail",
+      "health": "Santé",
+      "learn": "Apprentissage",
+      "home": "Maison",
+      "side-quest": "Quête secondaire"
+    }
   },
   "levelUp": {
     "title": "NIVEAU SUPÉRIEUR !",

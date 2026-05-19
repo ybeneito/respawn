@@ -69,7 +69,20 @@
     "continue": "CONTINUE →",
     "chooseRarity": "CHOOSE RARITY",
     "selectRarityAriaLabel": "Select {{ rarity }} rarity",
-    "saveError": "Failed to save quest. Please try again."
+    "saveError": "Failed to save quest. Please try again.",
+    "rarity": {
+      "low": "COMMON",
+      "med": "UNCOMMON",
+      "hi": "RARE",
+      "urg": "EPIC"
+    },
+    "tags": {
+      "work": "Work",
+      "health": "Health",
+      "learn": "Learning",
+      "home": "Home",
+      "side-quest": "Side Quest"
+    }
   },
   "levelUp": {
     "title": "LEVEL UP!",

@@ -21,7 +21,7 @@
               <button type="button" class="pbtn ghost sm"
                 [class.active]="tagControl.value === tag.value"
                 (click)="tagControl.setValue(tag.value)">
-                {{ tag.label }}
+                {{ 'createQuest.tags.' + tag.value | transloco }}
               </button>
             }
           </div>
@@ -39,9 +39,9 @@
         <div class="rarity-grid">
           @for (r of rarities; track r.value) {
             <button class="rarity-card pbox notch-corners rarity-{{ r.value }}"
-              [attr.aria-label]="'createQuest.selectRarityAriaLabel' | transloco: { rarity: r.label }"
+              [attr.aria-label]="'createQuest.selectRarityAriaLabel' | transloco: { rarity: ('createQuest.rarity.' + r.value | transloco) }"
               (click)="selectRarity(r.value)" [disabled]="loading()">
-              <span class="pf rarity-label">{{ r.label }}</span>
+              <span class="pf rarity-label">{{ 'createQuest.rarity.' + r.value | transloco }}</span>
               <span class="diamonds">{{ '◆'.repeat(r.diamonds) }}</span>
               <span class="xp-reward sk">+{{ r.xp }} XP</span>
             </button>

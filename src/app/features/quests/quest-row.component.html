@@ -7,7 +7,7 @@
   <span class="diamonds sk">{{ diamondChars[quest().rarity] }}</span>
   <div class="quest-info">
     <span class="vt title">{{ quest().title }}</span>
-    <span class="tag sk">{{ quest().tag }}</span>
+    <span class="tag sk">{{ 'createQuest.tags.' + quest().tag | transloco }}</span>
   </div>
   <div class="xp sk">
     <span class="coin">🪙</span>
