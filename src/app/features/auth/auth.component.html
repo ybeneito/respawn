@@ -16,6 +16,14 @@
       </button>
     </form>
 
+    <div class="auth-divider">
+      <span class="sk">— OR —</span>
+    </div>
+
+    <button class="pbtn ghost" type="button" (click)="handleGoogleSignIn()">
+      SIGN IN WITH GOOGLE
+    </button>
+
     <button class="pbtn ghost" type="button" (click)="toggle()">
       @if (isSignUp()) { <span>I ALREADY HAVE AN ACCOUNT</span> }
       @else { <span>CREATE AN ACCOUNT</span> }
