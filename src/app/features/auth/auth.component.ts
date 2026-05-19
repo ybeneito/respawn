@@ -52,9 +52,14 @@ export class AuthComponent {
   }
 
   async handleGoogleSignIn() {
+    this.loading.set(true);
     this.error.set(null);
-    const { error } = await this.auth.signInWithGoogle();
-    if (error) this.error.set(error.message);
+    try {
+      const { error } = await this.auth.signInWithGoogle();
+      if (error) this.error.set(error.message);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   toggle() { this.isSignUp.update(currentValue => !currentValue); }

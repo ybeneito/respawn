@@ -40,6 +40,7 @@ export class OnboardingComponent {
       this.router.navigate(['/dashboard']);
     } catch {
       this.error.set(this.transloco.translate('onboarding.saveError'));
+    } finally {
       this.loading.set(false);
     }
   }
