@@ -28,6 +28,7 @@ export class UserProfile {
     readonly lives: number,
     readonly streak: Streak,
     readonly createdAt: Date,
+    readonly onboardingDone: boolean = false,
   ) {}
 
   applyXP(amount: number, streakBroken = false): { profile: UserProfile; levelUp: boolean } {
@@ -36,7 +37,10 @@ export class UserProfile {
     const newLives = streakBroken ? Math.max(0, this.lives - 1) : this.lives;
     const levelUp = newLevel > this.level;
     return {
-      profile: new UserProfile(this.userId, this.username, this.avatarUrl, this.palette, newXp, newLevel, newLives, this.streak, this.createdAt),
+      profile: new UserProfile(
+        this.userId, this.username, this.avatarUrl, this.palette,
+        newXp, newLevel, newLives, this.streak, this.createdAt, this.onboardingDone,
+      ),
       levelUp,
     };
   }
@@ -69,7 +73,7 @@ export class UserProfile {
   withStreak(streak: Streak): UserProfile {
     return new UserProfile(
       this.userId, this.username, this.avatarUrl, this.palette,
-      this.xp, this.level, this.lives, streak, this.createdAt,
+      this.xp, this.level, this.lives, streak, this.createdAt, this.onboardingDone,
     );
   }
 }
