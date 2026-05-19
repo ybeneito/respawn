@@ -40,6 +40,15 @@ describe('profileGuard', () => {
     expect(result).toEqual(router.createUrlTree(['/onboarding']));
   });
 
+  it('redirects to /onboarding when profile is null', async () => {
+    mockProfileRepo.findById.mockResolvedValue(null);
+    const router = TestBed.inject(Router);
+    const result = await TestBed.runInInjectionContext(
+      () => profileGuard({} as never, {} as never),
+    );
+    expect(result).toEqual(router.createUrlTree(['/onboarding']));
+  });
+
   it('allows navigation when profile repo throws (fail open)', async () => {
     mockProfileRepo.findById.mockRejectedValue(new Error('DB error'));
     const result = await TestBed.runInInjectionContext(
