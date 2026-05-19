@@ -36,3 +36,14 @@
   color: var(--acc-red, #e05050);
   margin: 0;
 }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-mut);
+}
+
+.auth-divider .sk {
+  font-size: 9px;
+}

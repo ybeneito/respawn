@@ -32,7 +32,9 @@ export class OnboardingComponent {
     this.loading.set(true);
     this.error.set(null);
     try {
-      await this.profileRepo.updatePalette(this.currentUser.getUserId(), this.selected());
+      const userId = this.currentUser.getUserId();
+      await this.profileRepo.updatePalette(userId, this.selected());
+      await this.profileRepo.updateOnboardingDone(userId);
       this.router.navigate(['/dashboard']);
     } catch {
       this.error.set('Failed to save your choice. Please try again.');

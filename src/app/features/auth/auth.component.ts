@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, effect } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SupabaseAuthService } from '../../../infrastructure/auth/supabase-auth.service';
@@ -14,6 +14,12 @@ export class AuthComponent {
   private readonly auth = inject(SupabaseAuthService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+
+  constructor() {
+    effect(() => {
+      if (this.auth.session()) this.router.navigate(['/']);
+    });
+  }
 
   readonly isSignUp = signal(false);
   readonly error = signal<string | null>(null);
@@ -41,6 +47,12 @@ export class AuthComponent {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  async handleGoogleSignIn() {
+    this.error.set(null);
+    const { error } = await this.auth.signInWithGoogle();
+    if (error) this.error.set(error.message);
   }
 
   toggle() { this.isSignUp.update(currentValue => !currentValue); }
