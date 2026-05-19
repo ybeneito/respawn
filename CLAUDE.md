@@ -18,6 +18,12 @@ test/*  ← tests only
 
 Never push directly to `main`.
 
+**Before creating any branch**, always sync local main first:
+```bash
+git checkout main && git pull origin main
+```
+Skipping this creates branches from a stale base — PRs will include unrelated commits.
+
 ## Stack
 
 - **Frontend:** Angular 21, standalone components, Signals, OnPush
