@@ -38,6 +38,13 @@ export class SupabaseAuthService implements OnDestroy, ICurrentUserPort, IAuthSe
     return supabase.auth.signInWithPassword({ email, password });
   }
 
+  signInWithGoogle() {
+    return supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth` },
+    });
+  }
+
   signOut() {
     return supabase.auth.signOut();
   }
