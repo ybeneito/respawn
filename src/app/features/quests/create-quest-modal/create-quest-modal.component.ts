@@ -63,8 +63,7 @@ export class CreateQuestModalComponent {
   }
 
   nextStep() {
-    const title = this.form.value.title?.trim() ?? '';
-    if (!title || this.form.get('title')?.invalid) return;
+    if (this.form.get('title')?.invalid) return;
     this.step.set(2);
   }
 

@@ -14,7 +14,7 @@
     @if (step() === 1) {
       <div class="step-content">
         <form [formGroup]="form">
-          <input class="pinput" formControlName="title" [placeholder]="'createQuest.namePlaceholder' | transloco" maxlength="100" [attr.aria-label]="'createQuest.namePlaceholder' | transloco">
+          <input class="pinput" formControlName="title" [placeholder]="'createQuest.namePlaceholder' | transloco" maxlength="100" [attr.aria-label]="'createQuest.nameAriaLabel' | transloco">
           <p class="sk char-count">{{ titleLength() }}/100</p>
           <div class="tag-chips">
             @for (tag of tags; track tag.value) {

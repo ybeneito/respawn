@@ -65,6 +65,7 @@
     "step": "STEP {{ step }}/2",
     "closeAriaLabel": "Close modal",
     "namePlaceholder": "Quest name…",
+    "nameAriaLabel": "Quest title",
     "continue": "CONTINUE →",
     "chooseRarity": "CHOOSE RARITY",
     "selectRarityAriaLabel": "Select {{ rarity }} rarity",

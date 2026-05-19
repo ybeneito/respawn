@@ -65,6 +65,7 @@
     "step": "ÉTAPE {{ step }}/2",
     "closeAriaLabel": "Fermer la fenêtre",
     "namePlaceholder": "Nom de la quête…",
+    "nameAriaLabel": "Titre de la quête",
     "continue": "CONTINUER →",
     "chooseRarity": "CHOISIR LA RARETÉ",
     "selectRarityAriaLabel": "Sélectionner la rareté {{ rarity }}",
