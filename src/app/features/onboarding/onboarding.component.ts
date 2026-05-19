@@ -1,5 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { CatPalette } from '../../../domain/profile/user-profile.entity';
 import { PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { CatSpriteComponent } from '../../shared/cat-sprite/cat-sprite.component';
@@ -12,12 +13,13 @@ const ALL_PALETTES: CatPalette[] = ['orange', 'black', 'slate', 'white', 'brown'
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CatSpriteComponent, PixelButtonComponent],
+  imports: [CatSpriteComponent, PixelButtonComponent, TranslocoPipe],
 })
 export class OnboardingComponent {
   private readonly profileRepo = inject(PROFILE_REPOSITORY);
   private readonly currentUser = inject(CURRENT_USER);
   private readonly router = inject(Router);
+  private readonly transloco = inject(TranslocoService);
 
   readonly palettes = ALL_PALETTES;
   readonly selected = signal<CatPalette>('orange');
@@ -37,7 +39,7 @@ export class OnboardingComponent {
       await this.profileRepo.updateOnboardingDone(userId);
       this.router.navigate(['/dashboard']);
     } catch {
-      this.error.set('Failed to save your choice. Please try again.');
+      this.error.set(this.transloco.translate('onboarding.saveError'));
       this.loading.set(false);
     }
   }
