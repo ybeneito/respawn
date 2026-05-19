@@ -2,18 +2,21 @@
 
 ## Git workflow
 
+GitHub Flow: `main` is always deployable. All changes go through a short-lived branch and a PR.
+
 ```
-main      ← production, protected — PR required, no direct push
-staging   ← integration — merge features/fixes here first
-feat/*    ← new features  (e.g. feat/42-leaderboard)
-fix/*     ← bug fixes     (e.g. fix/17-rls-grant)
-docs/*    ← documentation
-chore/*   ← tooling, deps, CI
+main    ← production, protected — PR required, squash merge only
+feat/*  ← new features  (e.g. feat/42-leaderboard)
+fix/*   ← bug fixes     (e.g. fix/17-rls-grant)
+docs/*  ← documentation
+chore/* ← tooling, deps, CI
+refactor/* ← refactoring
+test/*  ← tests only
 ```
 
-**Flow:** branch off `staging` → open PR → merge to `staging` → push `staging` to `main` to deploy.
+**Flow:** branch off `main` → commit → open PR → squash merge into `main` → CI deploys to Cloudflare Workers.
 
-Never push directly to `main`. Small one-liner fixes may be committed directly to `staging`.
+Never push directly to `main`.
 
 ## Stack
 
