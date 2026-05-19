@@ -1,20 +1,20 @@
 @if (loading()) {
-  <p class="sk loading-msg">Loading…</p>
+  <p class="sk loading-msg">{{ 'shared.loading' | transloco }}</p>
 } @else if (errorMessage()) {
   <p class="sk error-msg" role="alert">{{ errorMessage() }}</p>
 } @else {
   <div class="screen-header">
     <div>
-      <h2 class="pf">QUEST LOG</h2>
-      <p class="sk">{{ filtered().length }} quests</p>
+      <h2 class="pf">{{ 'quests.title' | transloco }}</h2>
+      <p class="sk">{{ 'quests.count' | transloco: { count: filtered().length } }}</p>
     </div>
-    <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
+    <button class="pbtn teal" (click)="showModal.set(true)">{{ 'quests.newQuest' | transloco }}</button>
   </div>
 
   <div class="filter-chips">
     @for (filterOption of filterOptions; track filterOption) {
       <button class="pbtn sm" [class.ghost]="filter() !== filterOption" (click)="filter.set(filterOption)">
-        {{ filterOption.toUpperCase() }}
+        {{ 'quests.filter.' + filterOption | transloco }}
       </button>
     }
   </div>
@@ -24,7 +24,7 @@
       <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
     }
     @empty {
-      <p class="vt empty-state">No quests here. Start one!</p>
+      <p class="vt empty-state">{{ 'quests.noQuests' | transloco }}</p>
     }
   </div>
 

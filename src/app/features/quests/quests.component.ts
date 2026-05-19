@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
@@ -13,12 +14,13 @@ type Filter = 'all' | 'today' | 'active' | 'done';
   templateUrl: './quests.component.html',
   styleUrl: './quests.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent],
+  imports: [QuestRowComponent, CreateQuestModalComponent, TranslocoPipe],
 })
 export class QuestsComponent implements OnInit {
   private readonly questRepo = inject(QUEST_REPOSITORY);
   private readonly profileRepo = inject(PROFILE_REPOSITORY);
   private readonly currentUser = inject(CURRENT_USER);
+  private readonly transloco = inject(TranslocoService);
   private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
@@ -46,7 +48,7 @@ export class QuestsComponent implements OnInit {
       const { allQuests } = await this.dashboardUseCase.execute();
       this.quests.set(allQuests);
     } catch {
-      this.errorMessage.set('Failed to load quests. Please refresh.');
+      this.errorMessage.set(this.transloco.translate('quests.loadError'));
     } finally {
       this.loading.set(false);
     }
@@ -62,7 +64,7 @@ export class QuestsComponent implements OnInit {
         list.map(quest => quest.id === questId ? result.quest : quest)
       );
     } catch {
-      this.completeError.set('Failed to complete quest. Please try again.');
+      this.completeError.set(this.transloco.translate('quests.completeError'));
     } finally {
       this.inFlightQuestIds.delete(questId);
     }

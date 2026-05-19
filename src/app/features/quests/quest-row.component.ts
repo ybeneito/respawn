@@ -1,4 +1,5 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Quest, QuestRarity, RARITY_META } from '../../../domain/quest/quest.entity';
 
 const DIAMOND_CHARS: Record<QuestRarity, string> = Object.fromEntries(
@@ -11,6 +12,7 @@ const DIAMOND_CHARS: Record<QuestRarity, string> = Object.fromEntries(
   templateUrl: './quest-row.component.html',
   styleUrl: './quest-row.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TranslocoPipe],
 })
 export class QuestRowComponent {
   readonly quest = input.required<Quest>();

@@ -1,7 +1,7 @@
 <div class="quest-row pbox notch-corners rarity-{{ quest().rarity }}" [class.done]="quest().status === 'done'">
   <button class="checkbox" [class.checked]="quest().status === 'done'"
     (click)="completed.emit(quest().id)" [disabled]="quest().status === 'done'"
-    [attr.aria-label]="'Complete: ' + quest().title">
+    [attr.aria-label]="'questRow.completeAriaLabel' | transloco: { title: quest().title }">
     @if (quest().status === 'done') { ✓ }
   </button>
   <span class="diamonds sk">{{ diamondChars[quest().rarity] }}</span>
