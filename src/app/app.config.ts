@@ -10,8 +10,12 @@ import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.servic
 import { TranslocoHttpLoader } from './core/transloco-loader';
 
 function getInitialLang(): string {
-  const stored = localStorage.getItem('respawn_lang');
-  return stored === 'fr' ? 'fr' : 'en';
+  try {
+    const stored = localStorage.getItem('respawn_lang');
+    return stored === 'fr' ? 'fr' : 'en';
+  } catch {
+    return 'en';
+  }
 }
 
 export const appConfig: ApplicationConfig = {
