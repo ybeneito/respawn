@@ -25,6 +25,7 @@ const makeRepos = (quest: Quest | null, profile: UserProfile | null) => ({
     save: vi.fn().mockImplementation(async (p: UserProfile) => p),
     create: vi.fn(),
     updatePalette: vi.fn(),
+    updateOnboardingDone: vi.fn(),
   } satisfies IUserProfileRepository,
 });
 

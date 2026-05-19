@@ -41,6 +41,14 @@ export class SupabaseProfileRepository implements IUserProfileRepository {
     if (error) throw error;
   }
 
+  async updateOnboardingDone(userId: string): Promise<void> {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ onboarding_done: true })
+      .eq('id', userId);
+    if (error) throw error;
+  }
+
   async create(dto: CreateProfileDto): Promise<UserProfile> {
     const { data, error } = await supabase
       .from('profiles')
@@ -67,6 +75,7 @@ export class SupabaseProfileRepository implements IUserProfileRepository {
       row['lives'] as number,
       streak,
       new Date(row['created_at'] as string),
+      row['onboarding_done'] as boolean,
     );
   }
 }
