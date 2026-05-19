@@ -32,6 +32,8 @@
   box-sizing: border-box;
 }
 
+.auth-card .pbtn { width: 100%; }
+
 .error {
   color: var(--acc-red, #e05050);
   margin: 0;
