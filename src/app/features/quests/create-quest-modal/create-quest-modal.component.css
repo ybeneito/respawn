@@ -79,7 +79,7 @@
 .rarity-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 }
 
 .rarity-card {
@@ -90,6 +90,7 @@
   padding: 16px 8px;
   cursor: pointer;
   width: 100%;
+  margin: 0;
 }
 
 .diamonds {
