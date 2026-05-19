@@ -117,6 +117,25 @@ supabase/
 
 ---
 
+## Contributing
+
+### Branch strategy
+
+```
+main      ← production, protected — PR required, no direct push
+develop   ← integration — merge features/fixes here first
+feat/*    ← new features  (e.g. feat/42-leaderboard)
+fix/*     ← bug fixes     (e.g. fix/17-rls-grant)
+docs/*    ← documentation
+chore/*   ← tooling, deps, CI
+```
+
+**Flow:** branch off `develop` → open PR → merge to `develop` → PR `develop` → `main` to deploy.
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`.
+
+---
+
 ## XP system
 
 | Rarity | Base XP | CSS class |
