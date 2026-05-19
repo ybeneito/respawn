@@ -1,4 +1,5 @@
 import { Component, input, output, computed, ChangeDetectionStrategy } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { CatSpriteComponent } from '../../shared/cat-sprite/cat-sprite.component';
 import { UserProfile } from '../../../domain/profile/user-profile.entity';
 
@@ -7,7 +8,7 @@ import { UserProfile } from '../../../domain/profile/user-profile.entity';
   templateUrl: './level-up.component.html',
   styleUrl: './level-up.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CatSpriteComponent],
+  imports: [CatSpriteComponent, TranslocoPipe],
 })
 export class LevelUpComponent {
   readonly profile = input.required<UserProfile>();

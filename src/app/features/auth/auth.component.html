@@ -1,32 +1,32 @@
 <div class="auth-shell">
   <div class="auth-card pbox notch-corners">
     <h1 class="pf">RESPAWN</h1>
-    <p class="sk">9 LIVES · ONE DAY AT A TIME</p>
+    <p class="sk">{{ 'tagline' | transloco }}</p>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <input class="pinput" type="email" formControlName="email" placeholder="email" aria-label="Email">
-      <input class="pinput" type="password" formControlName="password" placeholder="password" aria-label="Password">
+      <input class="pinput" type="email" formControlName="email" [placeholder]="'auth.emailPlaceholder' | transloco" [attr.aria-label]="'auth.emailPlaceholder' | transloco">
+      <input class="pinput" type="password" formControlName="password" [placeholder]="'auth.passwordPlaceholder' | transloco" [attr.aria-label]="'auth.passwordPlaceholder' | transloco">
       @if (error()) {
         <p class="error sk">{{ error() }}</p>
       }
       <button class="pbtn teal" type="submit" [disabled]="loading()">
-        @if (loading()) { <span>LOADING…</span> }
-        @else if (isSignUp()) { <span>CREATE ACCOUNT</span> }
-        @else { <span>SIGN IN</span> }
+        @if (loading()) { <span>{{ 'auth.loading' | transloco }}</span> }
+        @else if (isSignUp()) { <span>{{ 'auth.createAccount' | transloco }}</span> }
+        @else { <span>{{ 'auth.signIn' | transloco }}</span> }
       </button>
     </form>
 
     <div class="auth-divider">
-      <span class="sk">— OR —</span>
+      <span class="sk">{{ 'auth.or' | transloco }}</span>
     </div>
 
     <button class="pbtn ghost" type="button" (click)="handleGoogleSignIn()">
-      SIGN IN WITH GOOGLE
+      {{ 'auth.signInWithGoogle' | transloco }}
     </button>
 
     <button class="pbtn ghost" type="button" (click)="toggle()">
-      @if (isSignUp()) { <span>I ALREADY HAVE AN ACCOUNT</span> }
-      @else { <span>CREATE AN ACCOUNT</span> }
+      @if (isSignUp()) { <span>{{ 'auth.alreadyHaveAccount' | transloco }}</span> }
+      @else { <span>{{ 'auth.createAnAccount' | transloco }}</span> }
     </button>
   </div>
 </div>

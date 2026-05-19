@@ -1,0 +1,10 @@
+.lang-switcher {
+  display: flex;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.lang-switcher .pbtn.active {
+  border-color: var(--teal, #4ecdc4);
+  color: var(--teal, #4ecdc4);
+}

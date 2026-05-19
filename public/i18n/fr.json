@@ -1,0 +1,104 @@
+{
+  "tagline": "9 VIES · UN JOUR À LA FOIS",
+  "nav": {
+    "dashboard": "TABLEAU DE BORD",
+    "quests": "QUÊTES",
+    "signOut": "DÉCONNEXION"
+  },
+  "shared": {
+    "loading": "Chargement…"
+  },
+  "auth": {
+    "emailPlaceholder": "email",
+    "passwordPlaceholder": "mot de passe",
+    "loading": "CHARGEMENT…",
+    "createAccount": "CRÉER UN COMPTE",
+    "signIn": "SE CONNECTER",
+    "or": "— OU —",
+    "signInWithGoogle": "SE CONNECTER AVEC GOOGLE",
+    "alreadyHaveAccount": "J'AI DÉJÀ UN COMPTE",
+    "createAnAccount": "CRÉER UN COMPTE",
+    "unexpectedError": "Une erreur inattendue s'est produite. Réessaie."
+  },
+  "onboarding": {
+    "title": "CHOISIS TON COMPAGNON",
+    "subtitle": "TON CHAT. TON AVENTURE.",
+    "saving": "SAUVEGARDE…",
+    "startAdventure": "COMMENCER L'AVENTURE",
+    "catAriaLabel": "chat {{ palette }}",
+    "saveError": "Impossible de sauvegarder ton choix. Réessaie."
+  },
+  "dashboard": {
+    "title": "TABLEAU DE BORD",
+    "streakHeader": "Jour {{ current }} de série 🔥",
+    "newQuest": "+ NOUVELLE QUÊTE",
+    "todayLabel": "AUJOURD'HUI",
+    "questsDone": "quêtes terminées",
+    "streakLabel": "SÉRIE",
+    "dontBreakIt": "ne la brise pas",
+    "xpToday": "XP AUJOURD'HUI",
+    "pointsEarned": "points gagnés",
+    "todaysQuests": "QUÊTES DU JOUR",
+    "noQuestsToday": "Aucune quête prévue pour aujourd'hui.",
+    "loadError": "Impossible de charger le tableau de bord. Recharge la page.",
+    "completeError": "Impossible de compléter la quête. Réessaie."
+  },
+  "quests": {
+    "title": "JOURNAL DE QUÊTES",
+    "count": "{{ count }} quêtes",
+    "newQuest": "+ NOUVELLE QUÊTE",
+    "noQuests": "Aucune quête ici. Lance-toi !",
+    "loadError": "Impossible de charger les quêtes. Recharge la page.",
+    "completeError": "Impossible de compléter la quête. Réessaie.",
+    "filter": {
+      "all": "TOUT",
+      "today": "AUJOURD'HUI",
+      "active": "ACTIF",
+      "done": "TERMINÉ"
+    }
+  },
+  "questRow": {
+    "completeAriaLabel": "Compléter : {{ title }}"
+  },
+  "createQuest": {
+    "title": "NOUVELLE QUÊTE",
+    "step": "ÉTAPE {{ step }}/2",
+    "closeAriaLabel": "Fermer la fenêtre",
+    "namePlaceholder": "Nom de la quête…",
+    "nameAriaLabel": "Titre de la quête",
+    "continue": "CONTINUER →",
+    "chooseRarity": "CHOISIR LA RARETÉ",
+    "selectRarityAriaLabel": "Sélectionner la rareté {{ rarity }}",
+    "saveError": "Impossible de sauvegarder la quête. Réessaie.",
+    "rarity": {
+      "low": "COMMUN",
+      "med": "PEU COMMUN",
+      "hi": "RARE",
+      "urg": "ÉPIQUE"
+    },
+    "tags": {
+      "work": "Travail",
+      "health": "Santé",
+      "learn": "Apprentissage",
+      "home": "Maison",
+      "side-quest": "Quête secondaire"
+    }
+  },
+  "levelUp": {
+    "title": "NIVEAU SUPÉRIEUR !",
+    "continue": "CONTINUER →"
+  },
+  "companion": {
+    "loading": "CHARGEMENT…",
+    "label": "COMPAGNON",
+    "evolutionPath": "CHEMIN D'ÉVOLUTION",
+    "lives": "VIES",
+    "livesAriaLabel": "Vies restantes",
+    "xpToLevel": "XP POUR NVL {{ level }}",
+    "xpLeft": "{{ xp }} XP restants",
+    "totalXp": "XP TOTAL",
+    "bestStreak": "MEILLEURE SÉRIE",
+    "streak": "SÉRIE",
+    "livesLeft": "VIES RESTANTES"
+  }
+}

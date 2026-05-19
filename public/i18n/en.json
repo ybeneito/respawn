@@ -1,0 +1,104 @@
+{
+  "tagline": "9 LIVES · ONE DAY AT A TIME",
+  "nav": {
+    "dashboard": "DASHBOARD",
+    "quests": "QUESTS",
+    "signOut": "SIGN OUT"
+  },
+  "shared": {
+    "loading": "Loading…"
+  },
+  "auth": {
+    "emailPlaceholder": "email",
+    "passwordPlaceholder": "password",
+    "loading": "LOADING…",
+    "createAccount": "CREATE ACCOUNT",
+    "signIn": "SIGN IN",
+    "or": "— OR —",
+    "signInWithGoogle": "SIGN IN WITH GOOGLE",
+    "alreadyHaveAccount": "I ALREADY HAVE AN ACCOUNT",
+    "createAnAccount": "CREATE AN ACCOUNT",
+    "unexpectedError": "An unexpected error occurred. Please try again."
+  },
+  "onboarding": {
+    "title": "CHOOSE YOUR COMPANION",
+    "subtitle": "YOUR CAT. YOUR JOURNEY.",
+    "saving": "SAVING…",
+    "startAdventure": "START ADVENTURE",
+    "catAriaLabel": "{{ palette }} cat",
+    "saveError": "Failed to save your choice. Please try again."
+  },
+  "dashboard": {
+    "title": "DASHBOARD",
+    "streakHeader": "Day {{ current }} streak 🔥",
+    "newQuest": "+ NEW QUEST",
+    "todayLabel": "TODAY",
+    "questsDone": "quests done",
+    "streakLabel": "STREAK",
+    "dontBreakIt": "don't break it",
+    "xpToday": "XP TODAY",
+    "pointsEarned": "points earned",
+    "todaysQuests": "TODAY'S QUESTS",
+    "noQuestsToday": "No quests scheduled for today.",
+    "loadError": "Failed to load dashboard. Please refresh.",
+    "completeError": "Failed to complete quest. Please try again."
+  },
+  "quests": {
+    "title": "QUEST LOG",
+    "count": "{{ count }} quests",
+    "newQuest": "+ NEW QUEST",
+    "noQuests": "No quests here. Start one!",
+    "loadError": "Failed to load quests. Please refresh.",
+    "completeError": "Failed to complete quest. Please try again.",
+    "filter": {
+      "all": "ALL",
+      "today": "TODAY",
+      "active": "ACTIVE",
+      "done": "DONE"
+    }
+  },
+  "questRow": {
+    "completeAriaLabel": "Complete: {{ title }}"
+  },
+  "createQuest": {
+    "title": "NEW QUEST",
+    "step": "STEP {{ step }}/2",
+    "closeAriaLabel": "Close modal",
+    "namePlaceholder": "Quest name…",
+    "nameAriaLabel": "Quest title",
+    "continue": "CONTINUE →",
+    "chooseRarity": "CHOOSE RARITY",
+    "selectRarityAriaLabel": "Select {{ rarity }} rarity",
+    "saveError": "Failed to save quest. Please try again.",
+    "rarity": {
+      "low": "COMMON",
+      "med": "UNCOMMON",
+      "hi": "RARE",
+      "urg": "EPIC"
+    },
+    "tags": {
+      "work": "Work",
+      "health": "Health",
+      "learn": "Learning",
+      "home": "Home",
+      "side-quest": "Side Quest"
+    }
+  },
+  "levelUp": {
+    "title": "LEVEL UP!",
+    "continue": "CONTINUE RUN →"
+  },
+  "companion": {
+    "loading": "LOADING…",
+    "label": "COMPANION",
+    "evolutionPath": "EVOLUTION PATH",
+    "lives": "LIVES",
+    "livesAriaLabel": "Lives remaining",
+    "xpToLevel": "XP TO LVL {{ level }}",
+    "xpLeft": "{{ xp }} XP left",
+    "totalXp": "TOTAL XP",
+    "bestStreak": "BEST STREAK",
+    "streak": "STREAK",
+    "livesLeft": "LIVES LEFT"
+  }
+}

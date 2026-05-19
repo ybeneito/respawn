@@ -1,7 +1,7 @@
 <div class="onboarding-shell">
   <div class="onboarding-card pbox notch-corners">
-    <h1 class="pf">CHOOSE YOUR COMPANION</h1>
-    <p class="sk">YOUR CAT. YOUR JOURNEY.</p>
+    <h1 class="pf">{{ 'onboarding.title' | transloco }}</h1>
+    <p class="sk">{{ 'onboarding.subtitle' | transloco }}</p>
 
     <div class="palette-grid">
       @for (palette of palettes; track palette) {
@@ -10,7 +10,7 @@
           [class.selected]="selected() === palette"
           (click)="select(palette)"
           [attr.aria-pressed]="selected() === palette"
-          [attr.aria-label]="palette + ' cat'"
+          [attr.aria-label]="'onboarding.catAriaLabel' | transloco: { palette: palette }"
         >
           <app-cat-sprite [palette]="palette" stage="kitten" [pixelSize]="6" />
           <span class="palette-name sk">{{ palette }}</span>
@@ -23,7 +23,7 @@
     }
 
     <app-pixel-button variant="teal" [disabled]="loading()" (click)="confirm()">
-      @if (loading()) { SAVING… } @else { START ADVENTURE }
+      @if (loading()) { {{ 'onboarding.saving' | transloco }} } @else { {{ 'onboarding.startAdventure' | transloco }} }
     </app-pixel-button>
   </div>
 </div>

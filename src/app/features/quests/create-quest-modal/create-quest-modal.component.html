@@ -2,9 +2,9 @@
   <div class="modal pbox notch-corners" (click)="$event.stopPropagation()"
     role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-header">
-      <h2 id="modal-title" class="pf">NEW QUEST</h2>
-      <span class="sk step-indicator">STEP {{ step() }}/2</span>
-      <button class="pbtn ghost sm" (click)="closed.emit()" aria-label="Close modal">✕</button>
+      <h2 id="modal-title" class="pf">{{ 'createQuest.title' | transloco }}</h2>
+      <span class="sk step-indicator">{{ 'createQuest.step' | transloco: { step: step() } }}</span>
+      <button class="pbtn ghost sm" (click)="closed.emit()" [attr.aria-label]="'createQuest.closeAriaLabel' | transloco">✕</button>
     </div>
 
     <div class="step-bar">
@@ -14,19 +14,19 @@
     @if (step() === 1) {
       <div class="step-content">
         <form [formGroup]="form">
-          <input class="pinput" formControlName="title" placeholder="Quest name…" maxlength="100" aria-label="Quest title">
+          <input class="pinput" formControlName="title" [placeholder]="'createQuest.namePlaceholder' | transloco" maxlength="100" [attr.aria-label]="'createQuest.nameAriaLabel' | transloco">
           <p class="sk char-count">{{ titleLength() }}/100</p>
           <div class="tag-chips">
             @for (tag of tags; track tag.value) {
               <button type="button" class="pbtn ghost sm"
                 [class.active]="tagControl.value === tag.value"
                 (click)="tagControl.setValue(tag.value)">
-                {{ tag.label }}
+                {{ 'createQuest.tags.' + tag.value | transloco }}
               </button>
             }
           </div>
           <button class="pbtn teal" type="button" (click)="nextStep()" [disabled]="form.get('title')?.invalid">
-            CONTINUE →
+            {{ 'createQuest.continue' | transloco }}
           </button>
         </form>
       </div>
@@ -35,13 +35,13 @@
     @if (step() === 2) {
       <div class="step-content">
         <p class="vt title-echo">"{{ form.value.title }}"</p>
-        <p class="sk">CHOOSE RARITY</p>
+        <p class="sk">{{ 'createQuest.chooseRarity' | transloco }}</p>
         <div class="rarity-grid">
           @for (r of rarities; track r.value) {
             <button class="rarity-card pbox notch-corners rarity-{{ r.value }}"
-              [attr.aria-label]="'Select ' + r.label + ' rarity'"
+              [attr.aria-label]="'createQuest.selectRarityAriaLabel' | transloco: { rarity: ('createQuest.rarity.' + r.value | transloco) }"
               (click)="selectRarity(r.value)" [disabled]="loading()">
-              <span class="pf rarity-label">{{ r.label }}</span>
+              <span class="pf rarity-label">{{ 'createQuest.rarity.' + r.value | transloco }}</span>
               <span class="diamonds">{{ '◆'.repeat(r.diamonds) }}</span>
               <span class="xp-reward sk">+{{ r.xp }} XP</span>
             </button>

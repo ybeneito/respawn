@@ -1,7 +1,7 @@
 @if (profile(); as prof) {
 
   <div class="identity">
-    <p class="sk companion-label">COMPANION</p>
+    <p class="sk companion-label">{{ 'companion.label' | transloco }}</p>
     <p class="vt username">&#64;{{ prof.username }}</p>
     <p class="pf level-badge">LVL {{ prof.level }} · {{ stageInfo()?.label }}</p>
   </div>
@@ -19,7 +19,7 @@
 
   <div class="section">
     <div class="section-header">
-      <span class="sk section-label">EVOLUTION PATH</span>
+      <span class="sk section-label">{{ 'companion.evolutionPath' | transloco }}</span>
       <span class="pf current-stage-label">{{ stageInfo()?.label }}</span>
     </div>
     <div class="evolution-grid notch-corners">
@@ -40,10 +40,10 @@
 
   <div class="section">
     <div class="section-header">
-      <span class="sk section-label">LIVES</span>
+      <span class="sk section-label">{{ 'companion.lives' | transloco }}</span>
       <span class="pf lives-count">{{ prof.lives }}/9</span>
     </div>
-    <div class="hearts-row pbox-panel notch-corners" role="meter" [attr.aria-valuenow]="prof.lives" aria-valuemin="0" aria-valuemax="9" aria-label="Lives remaining">
+    <div class="hearts-row pbox-panel notch-corners" role="meter" [attr.aria-valuenow]="prof.lives" aria-valuemin="0" aria-valuemax="9" [attr.aria-label]="'companion.livesAriaLabel' | transloco">
       @for (filled of heartsArray(); track $index) {
         <span class="heart" [class.heart--empty]="!filled" aria-hidden="true">{{ filled ? '❤' : '♡' }}</span>
       }
@@ -52,33 +52,33 @@
 
   <div class="section">
     <div class="section-header">
-      <span class="sk section-label">XP TO LVL {{ prof.level + 1 }}</span>
-      <span class="pf xp-count">{{ prof.xpToNextLevel }} XP left</span>
+      <span class="sk section-label">{{ 'companion.xpToLevel' | transloco: { level: prof.level + 1 } }}</span>
+      <span class="pf xp-count">{{ 'companion.xpLeft' | transloco: { xp: prof.xpToNextLevel } }}</span>
     </div>
     <app-xp-bar [currentXp]="prof.xp" [xpForCurrentLevel]="prof.xpForCurrentLevel" [xpForNextLevel]="xpForNextLevel()" [showLabel]="false" />
   </div>
 
   <div class="mini-stats">
     <div class="mini-stat pbox-panel">
-      <span class="sk mini-label">TOTAL XP</span>
+      <span class="sk mini-label">{{ 'companion.totalXp' | transloco }}</span>
       <span class="pf mini-value">{{ prof.xp }}</span>
     </div>
     <div class="mini-stat pbox-panel">
-      <span class="sk mini-label">BEST STREAK</span>
+      <span class="sk mini-label">{{ 'companion.bestStreak' | transloco }}</span>
       <span class="pf mini-value">{{ prof.streak.longest }}d</span>
     </div>
     <div class="mini-stat pbox-panel">
-      <span class="sk mini-label">STREAK</span>
+      <span class="sk mini-label">{{ 'companion.streak' | transloco }}</span>
       <span class="pf mini-value">🔥 {{ prof.streak.current }}d</span>
     </div>
     <div class="mini-stat pbox-panel">
-      <span class="sk mini-label">LIVES LEFT</span>
+      <span class="sk mini-label">{{ 'companion.livesLeft' | transloco }}</span>
       <span class="pf mini-value">❤ {{ prof.lives }}/9</span>
     </div>
   </div>
 
 } @else {
   <div class="companion-loading">
-    <span class="sk">LOADING…</span>
+    <span class="sk">{{ 'companion.loading' | transloco }}</span>
   </div>
 }

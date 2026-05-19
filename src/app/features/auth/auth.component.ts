@@ -1,6 +1,7 @@
 import { Component, inject, signal, ChangeDetectionStrategy, effect } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SupabaseAuthService } from '../../../infrastructure/auth/supabase-auth.service';
 
 @Component({
@@ -8,12 +9,13 @@ import { SupabaseAuthService } from '../../../infrastructure/auth/supabase-auth.
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslocoPipe],
 })
 export class AuthComponent {
   private readonly auth = inject(SupabaseAuthService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+  private readonly transloco = inject(TranslocoService);
 
   constructor() {
     effect(() => {
@@ -43,16 +45,21 @@ export class AuthComponent {
       if (error) { this.error.set(error.message); return; }
       this.router.navigate([isSignUp ? '/onboarding' : '/dashboard']);
     } catch {
-      this.error.set('An unexpected error occurred. Please try again.');
+      this.error.set(this.transloco.translate('auth.unexpectedError'));
     } finally {
       this.loading.set(false);
     }
   }
 
   async handleGoogleSignIn() {
+    this.loading.set(true);
     this.error.set(null);
-    const { error } = await this.auth.signInWithGoogle();
-    if (error) this.error.set(error.message);
+    try {
+      const { error } = await this.auth.signInWithGoogle();
+      if (error) this.error.set(error.message);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   toggle() { this.isSignUp.update(currentValue => !currentValue); }

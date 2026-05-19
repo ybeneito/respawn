@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase, DashboardData } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
@@ -15,13 +16,14 @@ import { Quest } from '../../../domain/quest/quest.entity';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent],
+  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
   private readonly profileRepo = inject(PROFILE_REPOSITORY);
   private readonly currentUser = inject(CURRENT_USER);
   private readonly profileState = inject(ProfileStateService);
+  private readonly transloco = inject(TranslocoService);
   private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
@@ -39,7 +41,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly newLevel = signal<number | null>(null);
 
   readonly profile = computed(() => this.data()?.userProfile ?? null);
-
   readonly sessionXpDelta = signal(0);
 
   readonly xpForNextLevel = computed(() => {
@@ -54,7 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.data.set(dashboard);
       this.profileState.profile.set(dashboard.userProfile);
     } catch {
-      this.errorMessage.set('Failed to load dashboard. Please refresh.');
+      this.errorMessage.set(this.transloco.translate('dashboard.loadError'));
     } finally {
       this.loading.set(false);
     }
@@ -87,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         todayDone: [...prev.todayDone, result.quest],
       }) : prev);
     } catch {
-      this.completeError.set('Failed to complete quest. Please try again.');
+      this.completeError.set(this.transloco.translate('dashboard.completeError'));
     } finally {
       this.inFlightQuestIds.delete(questId);
     }

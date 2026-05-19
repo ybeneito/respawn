@@ -1,31 +1,31 @@
 @if (loading()) {
-  <p class="sk loading-msg">Loading…</p>
+  <p class="sk loading-msg">{{ 'shared.loading' | transloco }}</p>
 } @else if (errorMessage()) {
   <p class="sk error-msg" role="alert">{{ errorMessage() }}</p>
 } @else if (data(); as dashboard) {
   <div class="screen-header">
     <div>
-      <h2 class="pf">DASHBOARD</h2>
-      <p class="vt">Day {{ dashboard.userProfile.streak.current }} streak 🔥</p>
+      <h2 class="pf">{{ 'dashboard.title' | transloco }}</h2>
+      <p class="vt">{{ 'dashboard.streakHeader' | transloco: { current: dashboard.userProfile.streak.current } }}</p>
     </div>
-    <button class="pbtn teal" (click)="showModal.set(true)">+ NEW QUEST</button>
+    <button class="pbtn teal" (click)="showModal.set(true)">{{ 'dashboard.newQuest' | transloco }}</button>
   </div>
 
   <div class="stat-blocks">
     <div class="stat-block pbox notch-corners">
-      <p class="sk label">TODAY</p>
+      <p class="sk label">{{ 'dashboard.todayLabel' | transloco }}</p>
       <p class="pf value">{{ dashboard.todayDone.length }}/{{ dashboard.todayActive.length + dashboard.todayDone.length }}</p>
-      <p class="sk caption">quests done</p>
+      <p class="sk caption">{{ 'dashboard.questsDone' | transloco }}</p>
     </div>
     <div class="stat-block pbox notch-corners">
-      <p class="sk label">STREAK</p>
+      <p class="sk label">{{ 'dashboard.streakLabel' | transloco }}</p>
       <p class="pf value">{{ dashboard.userProfile.streak.current }}d</p>
-      <p class="sk caption">don't break it</p>
+      <p class="sk caption">{{ 'dashboard.dontBreakIt' | transloco }}</p>
     </div>
     <div class="stat-block pbox notch-corners">
-      <p class="sk label">XP TODAY</p>
+      <p class="sk label">{{ 'dashboard.xpToday' | transloco }}</p>
       <p class="pf value">+{{ sessionXpDelta() }}</p>
-      <p class="sk caption">points earned</p>
+      <p class="sk caption">{{ 'dashboard.pointsEarned' | transloco }}</p>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
       [xpForNextLevel]="xpForNextLevel()" />
   }
 
-  <h3 class="pf section-title">TODAY'S QUESTS</h3>
+  <h3 class="pf section-title">{{ 'dashboard.todaysQuests' | transloco }}</h3>
 
   <div class="quest-list">
     @for (quest of dashboard.todayActive; track quest.id) {
@@ -46,7 +46,7 @@
       <app-quest-row [quest]="quest" (completed)="onQuestCompleted($event)" />
     }
     @if (dashboard.todayActive.length === 0 && dashboard.todayDone.length === 0) {
-      <p class="vt empty-state">No quests scheduled for today.</p>
+      <p class="vt empty-state">{{ 'dashboard.noQuestsToday' | transloco }}</p>
     }
   </div>
 
