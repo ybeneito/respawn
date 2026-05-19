@@ -9,7 +9,7 @@
       @if (error()) {
         <p class="error sk">{{ error() }}</p>
       }
-      <button class="pbtn teal" type="submit" [disabled]="loading()">
+      <button class="pbtn" type="submit" [disabled]="loading()">
         @if (loading()) { <span>{{ 'auth.loading' | transloco }}</span> }
         @else if (isSignUp()) { <span>{{ 'auth.createAccount' | transloco }}</span> }
         @else { <span>{{ 'auth.signIn' | transloco }}</span> }

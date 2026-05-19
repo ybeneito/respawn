@@ -4,15 +4,16 @@
   <div class="shell scanlines vignette">
     <nav class="left-rail" aria-label="Main navigation">
       <div class="logo">
-        <h1 class="pf logo-title">RESPAWN</h1>
-        <span class="sk tagline">{{ 'tagline' | transloco }}</span>
+        <img src="/respawn-mark.svg" alt="Respawn" class="logo-mark">
       </div>
       <ul class="nav-links">
         <li><a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf">{{ 'nav.dashboard' | transloco }}</a></li>
         <li><a routerLink="/quests" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf">{{ 'nav.quests' | transloco }}</a></li>
       </ul>
-      <app-lang-switcher />
-      <button class="pbtn ghost sm signout-btn" (click)="signOut()">{{ 'nav.signOut' | transloco }}</button>
+      <div class="bottom-actions">
+        <app-lang-switcher />
+        <button class="pbtn ghost sm signout-btn" (click)="signOut()">{{ 'nav.signOut' | transloco }}</button>
+      </div>
     </nav>
 
     <main class="main-area">

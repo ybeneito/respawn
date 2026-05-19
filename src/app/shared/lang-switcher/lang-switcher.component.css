@@ -2,6 +2,7 @@
   display: flex;
   gap: 4px;
   padding: 0 8px;
+  justify-content: center;
 }
 
 .lang-switcher .pbtn.active {
