@@ -1,4 +1,5 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { CatStage } from '../../../domain/profile/user-profile.entity';
 import { ProfileStateService } from '../../core/profile-state.service';
 import { XpBarComponent } from '../xp-bar/xp-bar.component';
@@ -10,7 +11,7 @@ import { STAGE_INFO, STAGE_ORDER } from '../cat-sprite/sprites.data';
   templateUrl: './companion-rail.component.html',
   styleUrl: './companion-rail.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [XpBarComponent, CatSpriteComponent],
+  imports: [XpBarComponent, CatSpriteComponent, TranslocoPipe],
 })
 export class CompanionRailComponent {
   private readonly profileState = inject(ProfileStateService);
