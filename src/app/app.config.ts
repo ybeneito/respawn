@@ -8,10 +8,11 @@ import { SupabaseQuestRepository } from '../infrastructure/supabase/supabase-que
 import { SupabaseProfileRepository } from '../infrastructure/supabase/supabase-profile.repository';
 import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.service';
 import { TranslocoHttpLoader } from './core/transloco-loader';
+import { LANG_STORAGE_KEY } from './core/constants';
 
 function getInitialLang(): string {
   try {
-    const stored = localStorage.getItem('respawn_lang');
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
     return stored === 'fr' ? 'fr' : 'en';
   } catch {
     return 'en';
