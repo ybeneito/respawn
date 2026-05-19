@@ -121,16 +121,19 @@ supabase/
 
 ### Branch strategy
 
+[GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow): `main` is always deployable, all changes go through a short-lived branch and a PR.
+
 ```
-main      ← production, protected — PR required, no direct push
-develop   ← integration — merge features/fixes here first
-feat/*    ← new features  (e.g. feat/42-leaderboard)
-fix/*     ← bug fixes     (e.g. fix/17-rls-grant)
-docs/*    ← documentation
-chore/*   ← tooling, deps, CI
+main       ← production, protected — PR + squash merge required
+feat/*     ← new features  (e.g. feat/42-leaderboard)
+fix/*      ← bug fixes     (e.g. fix/17-rls-grant)
+docs/*     ← documentation
+chore/*    ← tooling, deps, CI
+refactor/* ← refactoring
+test/*     ← tests only
 ```
 
-**Flow:** branch off `develop` → open PR → merge to `develop` → PR `develop` → `main` to deploy.
+**Flow:** branch off `main` → open PR → squash merge → CI deploys to Cloudflare Workers.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`.
 
