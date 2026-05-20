@@ -9,7 +9,7 @@ export const profileGuard: CanActivateFn = async () => {
 
   try {
     const profile = await profileRepo.findById(currentUser.getUserId());
-    if (!profile?.onboardingDone) return router.createUrlTree(['/onboarding']);
+    if (profile === null) return router.createUrlTree(['/onboarding']);
     return true;
   } catch {
     return true;
