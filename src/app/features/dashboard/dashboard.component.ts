@@ -45,10 +45,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly profile = computed(() => this.data()?.userProfile ?? null);
   readonly sessionXpDelta = signal(0);
 
-  readonly questCreatedCount = computed(() =>
-    (this.data()?.todayActive.length ?? 0) + (this.data()?.todayDone.length ?? 0),
-  );
-  readonly questCompletedCount = computed(() => this.data()?.todayDone.length ?? 0);
+  readonly questCreatedCount = signal(0);
+  readonly questCompletedCount = signal(0);
   readonly showTour = computed(() => this.profile() !== null && !this.profile()!.tourDone);
 
   readonly xpForNextLevel = computed(() => {
@@ -95,6 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         todayActive: prev.todayActive.filter(quest => quest.id !== questId),
         todayDone: [...prev.todayDone, result.quest],
       }) : prev);
+      this.questCompletedCount.update(count => count + 1);
     } catch {
       this.completeError.set(this.transloco.translate('dashboard.completeError'));
     } finally {
@@ -113,6 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         ? { ...prev, todayActive: [quest, ...prev.todayActive], allQuests: [quest, ...prev.allQuests] }
         : prev,
     );
+    this.questCreatedCount.update(count => count + 1);
     this.showModal.set(false);
   }
 
