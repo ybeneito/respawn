@@ -1,0 +1,52 @@
+@if (profile(); as prof) {
+  <div class="section-header">
+    <span class="sk section-label">COMPANION</span>
+  </div>
+
+  <div class="sprite-container">
+    <app-cat-sprite [palette]="prof.palette" [stage]="prof.stage" [pixelSize]="6" />
+  </div>
+
+  <div class="identity">
+    <p class="vt username">&#64;{{ prof.username }}</p>
+    <p class="pf level-badge">LVL {{ prof.level }} · {{ stageInfo()?.label }}</p>
+  </div>
+
+  <app-xp-bar
+    [currentXp]="prof.xp"
+    [xpForCurrentLevel]="prof.xpForCurrentLevel"
+    [xpForNextLevel]="xpForNextLevel()"
+    [showLabel]="false"
+  />
+
+  <div
+    class="hearts-row pbox-panel notch-corners"
+    role="meter"
+    [attr.aria-valuenow]="prof.lives"
+    aria-valuemin="0"
+    aria-valuemax="9"
+  >
+    @for (filled of heartsArray(); track $index) {
+      <span class="heart" [class.heart--empty]="!filled" aria-hidden="true">{{ filled ? '❤' : '♡' }}</span>
+    }
+  </div>
+
+  <div class="mini-stats">
+    <div class="mini-stat pbox-panel">
+      <span class="sk mini-label">{{ 'companion.totalXp' | transloco }}</span>
+      <span class="pf mini-value">{{ prof.xp }}</span>
+    </div>
+    <div class="mini-stat pbox-panel">
+      <span class="sk mini-label">{{ 'companion.bestStreak' | transloco }}</span>
+      <span class="pf mini-value">{{ prof.streak.longest }}d</span>
+    </div>
+    <div class="mini-stat pbox-panel">
+      <span class="sk mini-label">{{ 'companion.streak' | transloco }}</span>
+      <span class="pf mini-value">🔥 {{ prof.streak.current }}d</span>
+    </div>
+    <div class="mini-stat pbox-panel">
+      <span class="sk mini-label">{{ 'companion.livesLeft' | transloco }}</span>
+      <span class="pf mini-value">❤ {{ prof.lives }}/9</span>
+    </div>
+  </div>
+}

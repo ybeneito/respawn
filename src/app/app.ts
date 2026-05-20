@@ -3,6 +3,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
 import { TranslocoPipe } from '@jsverse/transloco';
 import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.service';
 import { CompanionRailComponent } from './shared/companion-rail/companion-rail.component';
+import { HamburgerMenuComponent } from './shared/hamburger-menu/hamburger-menu.component';
 import { LangSwitcherComponent } from './shared/lang-switcher/lang-switcher.component';
 
 @Component({
@@ -10,7 +11,7 @@ import { LangSwitcherComponent } from './shared/lang-switcher/lang-switcher.comp
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CompanionRailComponent, LangSwitcherComponent, TranslocoPipe],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CompanionRailComponent, HamburgerMenuComponent, LangSwitcherComponent, TranslocoPipe],
 })
 export class App {
   private readonly auth = inject(SupabaseAuthService);

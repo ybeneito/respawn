@@ -53,6 +53,8 @@
   @if (completeError()) {
     <p class="sk error-msg" role="alert">{{ completeError() }}</p>
   }
+
+  <app-companion-summary />
 }
 
 @if (showModal()) {

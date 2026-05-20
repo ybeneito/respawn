@@ -11,13 +11,14 @@ import { XpToastComponent } from './xp-toast.component';
 import { LevelUpComponent } from './level-up.component';
 import { Quest } from '../../../domain/quest/quest.entity';
 import { TourOverlayComponent } from '../onboarding/tour-overlay/tour-overlay.component';
+import { CompanionSummaryComponent } from '../../shared/companion-summary/companion-summary.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe, TourOverlayComponent],
+  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe, TourOverlayComponent, CompanionSummaryComponent],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
