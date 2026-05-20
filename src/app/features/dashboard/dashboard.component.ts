@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     (this.data()?.todayActive.length ?? 0) + (this.data()?.todayDone.length ?? 0),
   );
   readonly questCompletedCount = computed(() => this.data()?.todayDone.length ?? 0);
-  readonly showTour = computed(() => this.profile() !== null && !this.profile()!.onboardingDone);
+  readonly showTour = computed(() => this.profile() !== null && !this.profile()!.tourDone);
 
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
@@ -117,11 +117,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async onTourCompleted(): Promise<void> {
     try {
-      await this.profileRepo.updateOnboardingDone(this.currentUser.getUserId());
+      await this.profileRepo.updateTourDone(this.currentUser.getUserId());
       this.data.update(prev =>
-        prev ? { ...prev, userProfile: prev.userProfile.withOnboardingDone() } : prev,
+        prev ? { ...prev, userProfile: prev.userProfile.withTourDone() } : prev,
       );
-      this.profileState.profile.update(prof => prof?.withOnboardingDone() ?? prof);
+      this.profileState.profile.update(prof => prof?.withTourDone() ?? prof);
     } catch {
       this.completeError.set(this.transloco.translate('dashboard.completeError'));
     }

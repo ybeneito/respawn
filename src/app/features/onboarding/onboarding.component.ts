@@ -36,6 +36,7 @@ export class OnboardingComponent {
     try {
       const userId = this.currentUser.getUserId();
       await this.profileRepo.updatePalette(userId, this.selected());
+      await this.profileRepo.updateOnboardingDone(userId);
       this.router.navigate(['/dashboard']);
     } catch {
       this.error.set(this.transloco.translate('onboarding.saveError'));
