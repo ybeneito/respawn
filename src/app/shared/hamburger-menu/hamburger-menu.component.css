@@ -4,8 +4,8 @@
   left: 16px;
   z-index: 201;
   display: none;
-  font-size: 20px;
-  padding: 8px 12px;
+  font-size: 16px;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {

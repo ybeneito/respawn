@@ -65,7 +65,7 @@
   }
 
   .main-area {
-    padding: 16px;
+    padding: 0;
     overflow-y: visible;
   }
 }
