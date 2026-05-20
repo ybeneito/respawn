@@ -10,7 +10,6 @@ import { XpBarComponent } from '../../shared/xp-bar/xp-bar.component';
 import { XpToastComponent } from './xp-toast.component';
 import { LevelUpComponent } from './level-up.component';
 import { Quest } from '../../../domain/quest/quest.entity';
-import { UserProfile } from '../../../domain/profile/user-profile.entity';
 import { TourOverlayComponent } from '../onboarding/tour-overlay/tour-overlay.component';
 
 @Component({
@@ -117,28 +116,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async onTourCompleted(): Promise<void> {
-    const userId = this.currentUser.getUserId();
-    await this.profileRepo.updateOnboardingDone(userId);
-    this.data.update(prev => {
-      if (!prev) return prev;
-      const updatedProfile = new UserProfile(
-        prev.userProfile.userId,
-        prev.userProfile.username,
-        prev.userProfile.avatarUrl,
-        prev.userProfile.palette,
-        prev.userProfile.xp,
-        prev.userProfile.level,
-        prev.userProfile.lives,
-        prev.userProfile.streak,
-        prev.userProfile.createdAt,
-        true,
+    try {
+      await this.profileRepo.updateOnboardingDone(this.currentUser.getUserId());
+      this.data.update(prev =>
+        prev ? { ...prev, userProfile: prev.userProfile.withOnboardingDone() } : prev,
       );
-      return { ...prev, userProfile: updatedProfile };
-    });
-    this.profileState.profile.update(prof =>
-      prof
-        ? new UserProfile(prof.userId, prof.username, prof.avatarUrl, prof.palette, prof.xp, prof.level, prof.lives, prof.streak, prof.createdAt, true)
-        : prof,
-    );
+      this.profileState.profile.update(prof => prof?.withOnboardingDone() ?? prof);
+    } catch {
+      this.completeError.set(this.transloco.translate('dashboard.completeError'));
+    }
   }
 }

@@ -76,4 +76,11 @@ export class UserProfile {
       this.xp, this.level, this.lives, streak, this.createdAt, this.onboardingDone,
     );
   }
+
+  withOnboardingDone(): UserProfile {
+    return new UserProfile(
+      this.userId, this.username, this.avatarUrl, this.palette,
+      this.xp, this.level, this.lives, this.streak, this.createdAt, true,
+    );
+  }
 }
