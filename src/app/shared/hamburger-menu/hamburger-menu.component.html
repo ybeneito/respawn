@@ -1,0 +1,19 @@
+<button class="hamburger-btn pbtn ghost" (click)="open()" aria-label="Menu">☰</button>
+
+@if (isOpen()) {
+  <div class="backdrop" (click)="close()"></div>
+  <nav class="nav-panel" aria-label="Mobile navigation">
+    <button class="close-btn pbtn ghost sm" (click)="close()">✕</button>
+    <div class="logo">
+      <img src="/respawn-mark.svg" alt="Respawn" class="logo-mark">
+    </div>
+    <ul class="nav-links">
+      <li><a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf" (click)="close()">{{ 'nav.dashboard' | transloco }}</a></li>
+      <li><a routerLink="/quests" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item pf" (click)="close()">{{ 'nav.quests' | transloco }}</a></li>
+    </ul>
+    <div class="bottom-actions">
+      <app-lang-switcher />
+      <button class="pbtn ghost sm" (click)="onSignOut()">{{ 'nav.signOut' | transloco }}</button>
+    </div>
+  </nav>
+}
