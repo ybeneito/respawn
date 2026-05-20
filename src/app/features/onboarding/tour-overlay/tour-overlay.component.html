@@ -1,0 +1,20 @@
+@if (spotlightStyle()) {
+  <div class="spotlight" [style]="spotlightStyle()"></div>
+}
+
+<div class="dialogue-bar">
+  <div class="cat-portrait">
+    <app-cat-sprite [palette]="palette()" stage="kitten" [pixelSize]="8" />
+  </div>
+
+  <div class="dialogue-content">
+    <p class="sk dialogue-text">{{ i18nKey() | transloco }}</p>
+
+    <div class="dialogue-footer">
+      <span class="sk progress-label">{{ 'tour.progress' | transloco: { current: stepIndex(), total: totalSteps() } }}</span>
+      <app-pixel-button variant="teal" [disabled]="isWaitStep()" (click)="advance()">
+        {{ 'tour.next' | transloco }}
+      </app-pixel-button>
+    </div>
+  </div>
+</div>

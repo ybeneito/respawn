@@ -100,5 +100,20 @@
     "bestStreak": "MEILLEURE SÉRIE",
     "streak": "SÉRIE",
     "livesLeft": "VIES RESTANTES"
+  },
+  "tour": {
+    "next": "►",
+    "progress": "{{ current }} / {{ total }}",
+    "step": {
+      "welcome": "Miaou ! Je suis ton compagnon de quête. Ensemble, on va accomplir de grandes choses !",
+      "companion": "C'est moi ! Je grandis à chaque niveau. Garde un œil sur mes vies — ne brise pas ta série !",
+      "xpStats": "Voici tes stats du jour. Chaque quête complétée te rapproche du prochain niveau !",
+      "newQuestBtn": "Il est temps de créer ta première quête ! Appuie sur ce bouton pour commencer.",
+      "modalOpen": "Parfait ! Donne un nom à ta quête. Essaie « Finir cette quête » avec la catégorie « Apprentissage » !",
+      "questRarity": "Maintenant choisis la rareté. Commence par « COMMUN » — tu verras, les XP s'accumulent vite !",
+      "questCreated": "Ta quête est là ! Maintenant, complète-la pour gagner ton premier XP !",
+      "questCompleted": "Incroyable ! Tu viens de gagner ton premier XP. Regarde ta barre d'XP progresser !",
+      "done": "Tu es prêt pour l'aventure. Bonne chance, héros ! Je serai là si tu as besoin de moi."
+    }
   }
 }

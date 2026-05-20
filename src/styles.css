@@ -39,6 +39,9 @@
   --acc-rarity-urg: oklch(0.78 0.2 35);
 
   --px: 4px; /* pixel unit */
+
+  --left-rail-w: 220px;
+  --right-rail-w: 380px;
 }
 
 /* Accent swap — purple is default; data-accent overrides */

@@ -10,13 +10,14 @@ import { XpBarComponent } from '../../shared/xp-bar/xp-bar.component';
 import { XpToastComponent } from './xp-toast.component';
 import { LevelUpComponent } from './level-up.component';
 import { Quest } from '../../../domain/quest/quest.entity';
+import { TourOverlayComponent } from '../onboarding/tour-overlay/tour-overlay.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe],
+  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe, TourOverlayComponent],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
@@ -42,6 +43,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   readonly profile = computed(() => this.data()?.userProfile ?? null);
   readonly sessionXpDelta = signal(0);
+
+  readonly questCreatedCount = computed(() =>
+    (this.data()?.todayActive.length ?? 0) + (this.data()?.todayDone.length ?? 0),
+  );
+  readonly questCompletedCount = computed(() => this.data()?.todayDone.length ?? 0);
+  readonly showTour = computed(() => this.profile() !== null && !this.profile()!.tourDone);
 
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
@@ -106,5 +113,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         : prev,
     );
     this.showModal.set(false);
+  }
+
+  async onTourCompleted(): Promise<void> {
+    try {
+      await this.profileRepo.updateTourDone(this.currentUser.getUserId());
+      this.data.update(prev =>
+        prev ? { ...prev, userProfile: prev.userProfile.withTourDone() } : prev,
+      );
+      this.profileState.profile.update(prof => prof?.withTourDone() ?? prof);
+    } catch {
+      this.completeError.set(this.transloco.translate('dashboard.completeError'));
+    }
   }
 }

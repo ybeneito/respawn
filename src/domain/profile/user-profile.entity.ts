@@ -29,6 +29,7 @@ export class UserProfile {
     readonly streak: Streak,
     readonly createdAt: Date,
     readonly onboardingDone: boolean = false,
+    readonly tourDone: boolean = false,
   ) {}
 
   applyXP(amount: number, streakBroken = false): { profile: UserProfile; levelUp: boolean } {
@@ -39,7 +40,7 @@ export class UserProfile {
     return {
       profile: new UserProfile(
         this.userId, this.username, this.avatarUrl, this.palette,
-        newXp, newLevel, newLives, this.streak, this.createdAt, this.onboardingDone,
+        newXp, newLevel, newLives, this.streak, this.createdAt, this.onboardingDone, this.tourDone,
       ),
       levelUp,
     };
@@ -73,7 +74,15 @@ export class UserProfile {
   withStreak(streak: Streak): UserProfile {
     return new UserProfile(
       this.userId, this.username, this.avatarUrl, this.palette,
-      this.xp, this.level, this.lives, streak, this.createdAt, this.onboardingDone,
+      this.xp, this.level, this.lives, streak, this.createdAt, this.onboardingDone, this.tourDone,
+    );
+  }
+
+  withTourDone(): UserProfile {
+    return new UserProfile(
+      this.userId, this.username, this.avatarUrl, this.palette,
+      this.xp, this.level, this.lives, this.streak, this.createdAt,
+      this.onboardingDone, true,
     );
   }
 }
