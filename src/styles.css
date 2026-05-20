@@ -280,3 +280,11 @@ img, canvas { image-rendering: pixelated; }
 
 /* Disable text selection on game-y elements */
 .pf, .sk, .pbtn { user-select: none; }
+
+@media (max-width: 768px) {
+  html, body, #root {
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+  }
+}
