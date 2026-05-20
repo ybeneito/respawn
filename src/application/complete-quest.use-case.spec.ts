@@ -26,6 +26,7 @@ const makeRepos = (quest: Quest | null, profile: UserProfile | null) => ({
     create: vi.fn(),
     updatePalette: vi.fn(),
     updateOnboardingDone: vi.fn(),
+    updateTourDone: vi.fn(),
   } satisfies IUserProfileRepository,
 });
 
