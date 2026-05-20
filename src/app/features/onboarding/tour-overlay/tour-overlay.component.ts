@@ -41,8 +41,8 @@ export const STEP_SELECTORS: Record<TourStep, string | null> = {
   xpStats: '.stat-blocks',
   newQuestBtn: '.screen-header .pbtn.teal',
   modalOpen: 'app-create-quest-modal',
-  questCreated: 'app-quest-row', // first row = newly created quest (prepended by dashboard)
-  questCompleted: 'app-quest-row', // same element — quest moves to done list after completion
+  questCreated: 'app-quest-row',
+  questCompleted: 'app-quest-row',
   done: null,
 };
 
