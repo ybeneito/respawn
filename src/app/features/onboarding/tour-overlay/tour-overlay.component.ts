@@ -6,7 +6,8 @@ import {
   signal,
   computed,
   effect,
-  afterEveryRender,
+  untracked,
+  afterNextRender,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { CatPalette } from '../../../../domain/profile/user-profile.entity';
@@ -40,8 +41,8 @@ export const STEP_SELECTORS: Record<TourStep, string | null> = {
   xpStats: '.stat-blocks',
   newQuestBtn: '.screen-header .pbtn.teal',
   modalOpen: 'app-create-quest-modal',
-  questCreated: 'app-quest-row',
-  questCompleted: 'app-quest-row',
+  questCreated: 'app-quest-row', // first row = newly created quest (prepended by dashboard)
+  questCompleted: 'app-quest-row', // same element — quest moves to done list after completion
   done: null,
 };
 
@@ -71,6 +72,7 @@ export class TourOverlayComponent {
   readonly spotlightRect = signal<DOMRect | null>(null);
 
   readonly stepIndex = computed(() => TOUR_STEPS.indexOf(this.currentStep()) + 1);
+  readonly totalSteps = computed(() => TOUR_STEPS.length);
   readonly isWaitStep = computed(() => WAIT_STEPS.has(this.currentStep()));
   readonly i18nKey = computed(() => 'tour.step.' + this.currentStep());
   readonly spotlightStyle = computed(() => {
@@ -85,23 +87,27 @@ export class TourOverlayComponent {
   });
 
   constructor() {
-    afterEveryRender(() => {
-      const selector = STEP_SELECTORS[this.currentStep()];
-      if (selector === null) {
-        this.spotlightRect.set(null);
-      } else {
-        this.spotlightRect.set(
-          document.querySelector(selector)?.getBoundingClientRect() ?? null,
-        );
-      }
+    effect(() => {
+      const step = this.currentStep(); // reactive — effect re-runs when step changes
+      const selector = STEP_SELECTORS[step];
+      afterNextRender(() => {
+        if (!selector) {
+          this.spotlightRect.set(null);
+          return;
+        }
+        this.spotlightRect.set(document.querySelector(selector)?.getBoundingClientRect() ?? null);
+      });
     });
 
     effect(() => {
-      if (this.questCreatedCount() >= 1 && this.currentStep() === 'modalOpen') {
-        this.currentStep.set('questCreated');
-      }
-      if (this.questCompletedCount() >= 1 && this.currentStep() === 'questCreated') {
-        this.currentStep.set('questCompleted');
+      const createdCount = this.questCreatedCount();
+      const completedCount = this.questCompletedCount();
+      const step = this.currentStep();
+
+      if (createdCount >= 1 && step === 'modalOpen') {
+        untracked(() => this.currentStep.set('questCreated'));
+      } else if (completedCount >= 1 && step === 'questCreated') {
+        untracked(() => this.currentStep.set('questCompleted'));
       }
     });
   }
@@ -115,7 +121,9 @@ export class TourOverlayComponent {
       this.tourCompleted.emit();
     } else {
       const nextIndex = TOUR_STEPS.indexOf(step) + 1;
-      this.currentStep.set(TOUR_STEPS[nextIndex]);
+      if (nextIndex < TOUR_STEPS.length) {
+        this.currentStep.set(TOUR_STEPS[nextIndex]);
+      }
     }
   }
 }
