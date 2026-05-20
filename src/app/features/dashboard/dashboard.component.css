@@ -77,4 +77,6 @@
 
 @media (max-width: 768px) {
   .screen-header > div:first-child { display: none; }
+  .screen-header { justify-content: flex-end; padding-left: 60px; }
+  .stat-blocks { grid-template-columns: 1fr; }
 }
