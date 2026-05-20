@@ -2,8 +2,10 @@
   <div class="spotlight" [style]="spotlightStyle()"></div>
 }
 
-<div class="dialogue-bar pbox notch-corners">
-  <app-cat-sprite [palette]="palette()" stage="kitten" [pixelSize]="6" />
+<div class="dialogue-bar">
+  <div class="cat-portrait">
+    <app-cat-sprite [palette]="palette()" stage="kitten" [pixelSize]="8" />
+  </div>
 
   <div class="dialogue-content">
     <p class="sk dialogue-text">{{ i18nKey() | transloco }}</p>

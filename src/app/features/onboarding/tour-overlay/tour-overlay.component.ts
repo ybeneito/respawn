@@ -40,13 +40,13 @@ export const STEP_SELECTORS: Record<TourStep, string | null> = {
   companion: 'app-companion-rail',
   xpStats: '.stat-blocks',
   newQuestBtn: '.screen-header .pbtn.teal',
-  modalOpen: 'app-create-quest-modal',
+  modalOpen: 'app-create-quest-modal .modal',
   questCreated: 'app-quest-row',
   questCompleted: 'app-quest-row',
   done: null,
 };
 
-export const WAIT_STEPS: ReadonlySet<TourStep> = new Set(['modalOpen', 'questCreated']);
+export const WAIT_STEPS: ReadonlySet<TourStep> = new Set(['newQuestBtn', 'modalOpen', 'questCreated']);
 
 @Component({
   selector: 'app-tour-overlay',
@@ -61,7 +61,6 @@ export class TourOverlayComponent {
   readonly questCreatedCount = input(0);
   readonly questCompletedCount = input(0);
 
-  readonly openModal = output<void>();
   readonly tourCompleted = output<void>();
 
   readonly currentStep = signal<TourStep>('welcome');
@@ -98,11 +97,14 @@ export class TourOverlayComponent {
     });
 
     effect(() => {
+      const isModalOpen = this.modalOpen();
       const createdCount = this.questCreatedCount();
       const completedCount = this.questCompletedCount();
       const step = this.currentStep();
 
-      if (createdCount >= 1 && step === 'modalOpen') {
+      if (isModalOpen && step === 'newQuestBtn') {
+        untracked(() => this.currentStep.set('modalOpen'));
+      } else if (createdCount >= 1 && step === 'modalOpen') {
         untracked(() => this.currentStep.set('questCreated'));
       } else if (completedCount >= 1 && step === 'questCreated') {
         untracked(() => this.currentStep.set('questCompleted'));
@@ -112,10 +114,7 @@ export class TourOverlayComponent {
 
   advance(): void {
     const step = this.currentStep();
-    if (step === 'newQuestBtn') {
-      this.openModal.emit();
-      this.currentStep.set('modalOpen');
-    } else if (step === 'done') {
+    if (step === 'done') {
       this.tourCompleted.emit();
     } else {
       const nextIndex = TOUR_STEPS.indexOf(step) + 1;
