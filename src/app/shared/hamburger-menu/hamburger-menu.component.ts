@@ -39,7 +39,7 @@ export class HamburgerMenuComponent {
   }
 
   onSignOut(): void {
-    this.signOutRequested.emit();
     this.close();
+    this.signOutRequested.emit();
   }
 }
