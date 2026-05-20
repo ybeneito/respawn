@@ -10,13 +10,17 @@ import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.servic
 import { TranslocoHttpLoader } from './core/transloco-loader';
 import { LANG_STORAGE_KEY } from './core/constants';
 
-function getInitialLang(): string {
+const SUPPORTED_LANGS = ['en', 'fr'] as const;
+type SupportedLang = (typeof SUPPORTED_LANGS)[number];
+
+function getInitialLang(): SupportedLang {
   try {
-    const stored = localStorage.getItem(LANG_STORAGE_KEY);
-    return stored === 'fr' ? 'fr' : 'en';
+    const browserLang = navigator.language?.slice(0, 2).toLowerCase() as SupportedLang;
+    if (SUPPORTED_LANGS.includes(browserLang)) return browserLang;
   } catch {
-    return 'en';
+    // navigator indisponible
   }
+  return 'en';
 }
 
 export const appConfig: ApplicationConfig = {
