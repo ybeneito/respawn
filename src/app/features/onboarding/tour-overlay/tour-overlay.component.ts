@@ -46,11 +46,7 @@ export const STEP_SELECTORS: Record<TourStep, string | null> = {
   done: null,
 };
 
-export const WAIT_STEPS: ReadonlySet<TourStep> = new Set([
-  'modalOpen',
-  'questCreated',
-  'questCompleted',
-]);
+export const WAIT_STEPS: ReadonlySet<TourStep> = new Set(['modalOpen', 'questCreated']);
 
 @Component({
   selector: 'app-tour-overlay',
