@@ -10,13 +10,15 @@ import { XpBarComponent } from '../../shared/xp-bar/xp-bar.component';
 import { XpToastComponent } from './xp-toast.component';
 import { LevelUpComponent } from './level-up.component';
 import { Quest } from '../../../domain/quest/quest.entity';
+import { UserProfile } from '../../../domain/profile/user-profile.entity';
+import { TourOverlayComponent } from '../onboarding/tour-overlay/tour-overlay.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe],
+  imports: [QuestRowComponent, CreateQuestModalComponent, XpBarComponent, XpToastComponent, LevelUpComponent, TranslocoPipe, TourOverlayComponent],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private readonly questRepo = inject(QUEST_REPOSITORY);
@@ -42,6 +44,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   readonly profile = computed(() => this.data()?.userProfile ?? null);
   readonly sessionXpDelta = signal(0);
+
+  readonly questCreatedCount = computed(() =>
+    (this.data()?.todayActive.length ?? 0) + (this.data()?.todayDone.length ?? 0),
+  );
+  readonly questCompletedCount = computed(() => this.data()?.todayDone.length ?? 0);
+  readonly showTour = computed(() => this.profile() !== null && !this.profile()!.onboardingDone);
 
   readonly xpForNextLevel = computed(() => {
     const prof = this.profile();
@@ -106,5 +114,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
         : prev,
     );
     this.showModal.set(false);
+  }
+
+  async onTourCompleted(): Promise<void> {
+    const userId = this.currentUser.getUserId();
+    await this.profileRepo.updateOnboardingDone(userId);
+    this.data.update(prev => {
+      if (!prev) return prev;
+      const updatedProfile = new UserProfile(
+        prev.userProfile.userId,
+        prev.userProfile.username,
+        prev.userProfile.avatarUrl,
+        prev.userProfile.palette,
+        prev.userProfile.xp,
+        prev.userProfile.level,
+        prev.userProfile.lives,
+        prev.userProfile.streak,
+        prev.userProfile.createdAt,
+        true,
+      );
+      return { ...prev, userProfile: updatedProfile };
+    });
+    this.profileState.profile.update(prof =>
+      prof
+        ? new UserProfile(prof.userId, prof.username, prof.avatarUrl, prof.palette, prof.xp, prof.level, prof.lives, prof.streak, prof.createdAt, true)
+        : prof,
+    );
   }
 }

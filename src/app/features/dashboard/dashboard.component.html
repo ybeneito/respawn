@@ -64,3 +64,14 @@
 @if (showLevelUp() && profile() && newLevel()) {
   <app-level-up [profile]="profile()!" [newLevel]="newLevel()!" (continued)="showLevelUp.set(false)" />
 }
+
+@if (showTour() && profile()) {
+  <app-tour-overlay
+    [palette]="profile()!.palette"
+    [modalOpen]="showModal()"
+    [questCreatedCount]="questCreatedCount()"
+    [questCompletedCount]="questCompletedCount()"
+    (openModal)="showModal.set(true)"
+    (tourCompleted)="onTourCompleted()"
+  />
+}
