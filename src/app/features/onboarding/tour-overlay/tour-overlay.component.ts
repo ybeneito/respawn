@@ -20,6 +20,7 @@ export type TourStep =
   | 'xpStats'
   | 'newQuestBtn'
   | 'modalOpen'
+  | 'questRarity'
   | 'questCreated'
   | 'questCompleted'
   | 'done';
@@ -30,6 +31,7 @@ export const TOUR_STEPS: readonly TourStep[] = [
   'xpStats',
   'newQuestBtn',
   'modalOpen',
+  'questRarity',
   'questCreated',
   'questCompleted',
   'done',
@@ -41,12 +43,13 @@ export const STEP_SELECTORS: Record<TourStep, string | null> = {
   xpStats: '.stat-blocks',
   newQuestBtn: '.screen-header .pbtn.teal',
   modalOpen: 'app-create-quest-modal .modal',
+  questRarity: '.rarity-grid',
   questCreated: 'app-quest-row',
-  questCompleted: 'app-quest-row',
+  questCompleted: 'app-xp-bar',
   done: null,
 };
 
-export const WAIT_STEPS: ReadonlySet<TourStep> = new Set(['newQuestBtn', 'modalOpen', 'questCreated']);
+export const WAIT_STEPS: ReadonlySet<TourStep> = new Set(['newQuestBtn', 'modalOpen', 'questRarity', 'questCreated']);
 
 @Component({
   selector: 'app-tour-overlay',
@@ -73,11 +76,12 @@ export class TourOverlayComponent {
   readonly spotlightStyle = computed(() => {
     const rect = this.spotlightRect();
     if (rect === null) return null;
+    const pad = 10;
     return {
-      top: rect.top + 'px',
-      left: rect.left + 'px',
-      width: rect.width + 'px',
-      height: rect.height + 'px',
+      top: (rect.top - pad) + 'px',
+      left: (rect.left - pad) + 'px',
+      width: (rect.width + pad * 2) + 'px',
+      height: (rect.height + pad * 2) + 'px',
     };
   });
 
@@ -86,6 +90,13 @@ export class TourOverlayComponent {
   constructor() {
     afterEveryRender(() => {
       const step = this.currentStep();
+
+      if (step === 'modalOpen' && document.querySelector('.rarity-grid')) {
+        this.previousStep = null;
+        this.currentStep.set('questRarity');
+        return;
+      }
+
       if (step === this.previousStep) return;
       this.previousStep = step;
       const selector = STEP_SELECTORS[step];
@@ -104,7 +115,7 @@ export class TourOverlayComponent {
 
       if (isModalOpen && step === 'newQuestBtn') {
         untracked(() => this.currentStep.set('modalOpen'));
-      } else if (createdCount >= 1 && step === 'modalOpen') {
+      } else if (createdCount >= 1 && (step === 'modalOpen' || step === 'questRarity')) {
         untracked(() => this.currentStep.set('questCreated'));
       } else if (completedCount >= 1 && step === 'questCreated') {
         untracked(() => this.currentStep.set('questCompleted'));
