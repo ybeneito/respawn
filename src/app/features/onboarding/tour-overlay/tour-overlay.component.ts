@@ -77,7 +77,6 @@ export class TourOverlayComponent {
     const rect = this.spotlightRect();
     if (rect === null) return null;
     return {
-      position: 'fixed',
       top: rect.top + 'px',
       left: rect.left + 'px',
       width: rect.width + 'px',
