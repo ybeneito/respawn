@@ -9,7 +9,7 @@
     <p class="sk dialogue-text">{{ i18nKey() | transloco }}</p>
 
     <div class="dialogue-footer">
-      <span class="sk progress-label">{{ 'tour.progress' | transloco: { current: stepIndex(), total: 8 } }}</span>
+      <span class="sk progress-label">{{ 'tour.progress' | transloco: { current: stepIndex(), total: totalSteps() } }}</span>
       <app-pixel-button variant="teal" [disabled]="isWaitStep()" (click)="advance()">
         {{ 'tour.next' | transloco }}
       </app-pixel-button>
