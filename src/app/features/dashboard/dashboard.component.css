@@ -81,4 +81,5 @@
   .stat-blocks { grid-template-columns: repeat(3, 1fr); }
   .stat-block { padding: 6px 8px; }
   .caption { display: none; }
+  :host > app-xp-bar { display: none; }
 }
