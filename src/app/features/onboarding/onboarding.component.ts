@@ -35,6 +35,7 @@ export class OnboardingComponent {
     this.error.set(null);
     try {
       const userId = this.currentUser.getUserId();
+      await this.waitForProfile(userId);
       await this.profileRepo.updatePalette(userId, this.selected());
       await this.profileRepo.updateOnboardingDone(userId);
       this.router.navigate(['/dashboard']);
@@ -43,5 +44,14 @@ export class OnboardingComponent {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  private async waitForProfile(userId: string): Promise<void> {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const profile = await this.profileRepo.findById(userId);
+      if (profile) return;
+      await new Promise(resolve => setTimeout(resolve, 800));
+    }
+    throw new Error('Profile not ready after signup');
   }
 }
