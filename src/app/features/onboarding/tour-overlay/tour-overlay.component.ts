@@ -7,7 +7,7 @@ import {
   computed,
   effect,
   untracked,
-  afterNextRender,
+  afterEveryRender,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { CatPalette } from '../../../../domain/profile/user-profile.entity';
@@ -86,17 +86,19 @@ export class TourOverlayComponent {
     };
   });
 
+  private previousStep: TourStep | null = null;
+
   constructor() {
-    effect(() => {
-      const step = this.currentStep(); // reactive — effect re-runs when step changes
+    afterEveryRender(() => {
+      const step = this.currentStep();
+      if (step === this.previousStep) return;
+      this.previousStep = step;
       const selector = STEP_SELECTORS[step];
-      afterNextRender(() => {
-        if (!selector) {
-          this.spotlightRect.set(null);
-          return;
-        }
-        this.spotlightRect.set(document.querySelector(selector)?.getBoundingClientRect() ?? null);
-      });
+      if (!selector) {
+        this.spotlightRect.set(null);
+        return;
+      }
+      this.spotlightRect.set(document.querySelector(selector)?.getBoundingClientRect() ?? null);
     });
 
     effect(() => {
