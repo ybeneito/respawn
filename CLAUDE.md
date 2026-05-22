@@ -36,6 +36,43 @@ Skipping this creates branches from a stale base — PRs will include unrelated 
 
 Clean Architecture + Hexagonal. Domain layer (`src/domain/`) is pure TypeScript — zero Angular or Supabase imports. Use cases (`src/application/`) orchestrate domain entities via repository interfaces. Supabase adapters (`src/infrastructure/`) implement those interfaces, injected via `InjectionToken`.
 
+## Architecture — règles strictes (violations = bug)
+
+### Dépendances par couche — sens unique, sans exception
+
+```
+Component → UseCase (@Injectable) → Port (InjectionToken) ← Adapter (infrastructure)
+```
+
+- Un composant ne connaît que des use cases.
+- Un use case ne connaît que des ports (interfaces via `InjectionToken`).
+- Un adapter est la seule couche qui importe Supabase ou Angular DI infrastructure.
+
+### INTERDIT dans les composants
+
+- Injecter `QUEST_REPOSITORY`, `PROFILE_REPOSITORY`, `CURRENT_USER` ou tout autre token d'infra.
+- Instancier un use case avec `new UseCase(repo, ...)` — même si ça compile, c'est une violation.
+
+### Pattern canonique
+
+```ts
+// src/application/my.use-case.ts
+@Injectable({ providedIn: 'root' })
+export class MyUseCase {
+  private readonly repo = inject(MY_REPOSITORY); // InjectionToken
+  execute() { ... }
+}
+
+// Dans le composant :
+private readonly myUseCase = inject(MyUseCase); // ← seul pattern autorisé
+```
+
+### Checklist avant tout nouveau composant ou use case
+
+- [ ] Le composant n'importe rien de `src/infrastructure/` ni de `src/domain/` sauf les entités (types purs)
+- [ ] Aucun `new UseCase(...)` dans un composant
+- [ ] Aucun token repo (`*_REPOSITORY`, `CURRENT_USER`) injecté hors use case ou adapter
+
 ## Supabase / PostgreSQL
 
 - Migrations live in `supabase/migrations/` — always add new migrations, never edit existing ones.
