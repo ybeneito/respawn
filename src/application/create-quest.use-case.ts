@@ -1,15 +1,16 @@
+import { Injectable, inject } from '@angular/core';
 import { Quest } from '../domain/quest/quest.entity';
 import { CreateQuestDto, IQuestRepository } from '../domain/quest/quest.repository';
 import { ICurrentUserPort } from '../domain/auth/current-user.port';
+import { QUEST_REPOSITORY, CURRENT_USER } from '../app/core/di-tokens';
 
 const TITLE_MIN_LENGTH = 1;
 export const QUEST_TITLE_MAX_LENGTH = 255;
 
+@Injectable({ providedIn: 'root' })
 export class CreateQuestUseCase {
-  constructor(
-    private readonly questRepo: IQuestRepository,
-    private readonly currentUser: ICurrentUserPort,
-  ) {}
+  private readonly questRepo = inject<IQuestRepository>(QUEST_REPOSITORY);
+  private readonly currentUser = inject<ICurrentUserPort>(CURRENT_USER);
 
   execute(dto: Omit<CreateQuestDto, 'ownerId'>): Promise<Quest> {
     const title = dto.title.trim();

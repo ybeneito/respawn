@@ -1,6 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
 import { Quest } from '../../../domain/quest/quest.entity';
@@ -17,12 +16,9 @@ type Filter = 'all' | 'today' | 'active' | 'done';
   imports: [QuestRowComponent, CreateQuestModalComponent, TranslocoPipe],
 })
 export class QuestsComponent implements OnInit {
-  private readonly questRepo = inject(QUEST_REPOSITORY);
-  private readonly profileRepo = inject(PROFILE_REPOSITORY);
-  private readonly currentUser = inject(CURRENT_USER);
+  private readonly dashboardUseCase = inject(GetUserDashboardUseCase);
+  private readonly completeUseCase = inject(CompleteQuestUseCase);
   private readonly transloco = inject(TranslocoService);
-  private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
-  private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
 
   readonly quests = signal<Quest[]>([]);

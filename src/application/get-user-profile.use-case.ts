@@ -5,15 +5,11 @@ import { ICurrentUserPort } from '../domain/auth/current-user.port';
 import { PROFILE_REPOSITORY, CURRENT_USER } from '../app/core/di-tokens';
 
 @Injectable({ providedIn: 'root' })
-export class MarkTourDoneUseCase {
+export class GetUserProfileUseCase {
   private readonly profileRepo = inject<IUserProfileRepository>(PROFILE_REPOSITORY);
   private readonly currentUser = inject<ICurrentUserPort>(CURRENT_USER);
 
-  async execute(): Promise<UserProfile> {
-    const userId = this.currentUser.getUserId();
-    const profile = await this.profileRepo.findById(userId);
-    if (!profile) throw new Error(`Profile ${userId} not found.`);
-    await this.profileRepo.updateTourDone(userId);
-    return profile.withTourDone();
+  execute(): Promise<UserProfile | null> {
+    return this.profileRepo.findById(this.currentUser.getUserId());
   }
 }

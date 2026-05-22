@@ -3,7 +3,6 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith } from 'rxjs/operators';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { QUEST_REPOSITORY, CURRENT_USER } from '../../../core/di-tokens';
 import { CreateQuestUseCase, QUEST_TITLE_MAX_LENGTH } from '../../../../application/create-quest.use-case';
 import { Quest, QuestRarity, QuestTag, RARITY_META, RarityMeta } from '../../../../domain/quest/quest.entity';
 
@@ -27,11 +26,9 @@ const TAGS: { value: QuestTag; label: string }[] = [
   imports: [ReactiveFormsModule, TranslocoPipe],
 })
 export class CreateQuestModalComponent {
-  private readonly questRepo = inject(QUEST_REPOSITORY);
-  private readonly currentUser = inject(CURRENT_USER);
+  private readonly useCase = inject(CreateQuestUseCase);
   private readonly fb = inject(FormBuilder);
   private readonly transloco = inject(TranslocoService);
-  private readonly useCase = new CreateQuestUseCase(this.questRepo, this.currentUser);
 
   readonly questCreated = output<Quest>();
   readonly closed = output<void>();
