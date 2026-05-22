@@ -1,12 +1,13 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { Injectable, OnDestroy, signal, computed } from '@angular/core';
 import { Session, Subscription } from '@supabase/supabase-js';
 import { ICurrentUserPort } from '../../domain/auth/current-user.port';
-import { IAuthSessionPort } from '../../domain/auth/auth-session.port';
+import { IAuthSessionPort, AuthOperationResult } from '../../domain/auth/auth-session.port';
 import { supabase } from '../supabase/supabase.client';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseAuthService implements OnDestroy, ICurrentUserPort, IAuthSessionPort {
   readonly session = signal<Session | null>(null);
+  readonly authState = computed(() => this.session() !== null);
 
   private readonly authSubscription: Subscription;
 
@@ -30,22 +31,25 @@ export class SupabaseAuthService implements OnDestroy, ICurrentUserPort, IAuthSe
     return currentSession.user.id;
   }
 
-  signUp(email: string, password: string) {
-    return supabase.auth.signUp({ email, password });
+  async signUp(email: string, password: string): Promise<AuthOperationResult> {
+    const { error } = await supabase.auth.signUp({ email, password });
+    return { error: error ? { message: error.message } : null };
   }
 
-  signIn(email: string, password: string) {
-    return supabase.auth.signInWithPassword({ email, password });
+  async signIn(email: string, password: string): Promise<AuthOperationResult> {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return { error: error ? { message: error.message } : null };
   }
 
-  signInWithGoogle() {
-    return supabase.auth.signInWithOAuth({
+  async signInWithGoogle(): Promise<AuthOperationResult> {
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/auth` },
     });
+    return { error: error ? { message: error.message } : null };
   }
 
-  signOut() {
-    return supabase.auth.signOut();
+  async signOut(): Promise<void> {
+    await supabase.auth.signOut();
   }
 }

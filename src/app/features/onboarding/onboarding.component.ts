@@ -2,7 +2,6 @@ import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/cor
 import { Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { CatPalette } from '../../../domain/profile/user-profile.entity';
-import { PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { CompleteOnboardingUseCase } from '../../../application/complete-onboarding.use-case';
 import { CatSpriteComponent } from '../../shared/cat-sprite/cat-sprite.component';
 import { PixelButtonComponent } from '../../shared/pixel-button/pixel-button.component';
@@ -17,11 +16,9 @@ const ALL_PALETTES: CatPalette[] = ['orange', 'black', 'slate', 'white', 'brown'
   imports: [CatSpriteComponent, PixelButtonComponent, TranslocoPipe],
 })
 export class OnboardingComponent {
-  private readonly profileRepo = inject(PROFILE_REPOSITORY);
-  private readonly currentUser = inject(CURRENT_USER);
+  private readonly completeOnboarding = inject(CompleteOnboardingUseCase);
   private readonly router = inject(Router);
   private readonly transloco = inject(TranslocoService);
-  private readonly completeOnboarding = new CompleteOnboardingUseCase(this.profileRepo, this.currentUser);
 
   readonly palettes = ALL_PALETTES;
   readonly selected = signal<CatPalette>('orange');

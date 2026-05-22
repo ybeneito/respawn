@@ -1,7 +1,7 @@
 import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { SupabaseAuthService } from '../infrastructure/auth/supabase-auth.service';
+import { AUTH_SESSION } from './core/di-tokens';
 import { CompanionRailComponent } from './shared/companion-rail/companion-rail.component';
 import { HamburgerMenuComponent } from './shared/hamburger-menu/hamburger-menu.component';
 import { LangSwitcherComponent } from './shared/lang-switcher/lang-switcher.component';
@@ -14,9 +14,9 @@ import { LangSwitcherComponent } from './shared/lang-switcher/lang-switcher.comp
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CompanionRailComponent, HamburgerMenuComponent, LangSwitcherComponent, TranslocoPipe],
 })
 export class App {
-  private readonly auth = inject(SupabaseAuthService);
+  private readonly auth = inject(AUTH_SESSION);
   private readonly router = inject(Router);
-  readonly isLoggedIn = computed(() => !!this.auth.session());
+  readonly isLoggedIn = computed(() => this.auth.authState());
 
   async signOut(): Promise<void> {
     await this.auth.signOut();

@@ -1,9 +1,11 @@
+import { Injectable, inject } from '@angular/core';
 import { Quest } from '../domain/quest/quest.entity';
 import { UserProfile } from '../domain/profile/user-profile.entity';
 import { Streak } from '../domain/profile/streak.entity';
 import { IQuestRepository } from '../domain/quest/quest.repository';
 import { IUserProfileRepository } from '../domain/profile/profile.repository';
 import { ICurrentUserPort } from '../domain/auth/current-user.port';
+import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../app/core/di-tokens';
 
 export interface CompleteQuestResult {
   quest: Quest;
@@ -15,12 +17,11 @@ export interface CompleteQuestResult {
   profile: UserProfile;
 }
 
+@Injectable({ providedIn: 'root' })
 export class CompleteQuestUseCase {
-  constructor(
-    private readonly questRepo: IQuestRepository,
-    private readonly profileRepo: IUserProfileRepository,
-    private readonly currentUser: ICurrentUserPort,
-  ) {}
+  private readonly questRepo = inject<IQuestRepository>(QUEST_REPOSITORY);
+  private readonly profileRepo = inject<IUserProfileRepository>(PROFILE_REPOSITORY);
+  private readonly currentUser = inject<ICurrentUserPort>(CURRENT_USER);
 
   async execute(questId: string, today: Date): Promise<CompleteQuestResult> {
     const userId = this.currentUser.getUserId();

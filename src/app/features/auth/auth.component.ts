@@ -2,7 +2,7 @@ import { Component, inject, signal, ChangeDetectionStrategy, effect } from '@ang
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { SupabaseAuthService } from '../../../infrastructure/auth/supabase-auth.service';
+import { AUTH_SESSION } from '../../core/di-tokens';
 
 @Component({
   selector: 'app-auth',
@@ -12,14 +12,14 @@ import { SupabaseAuthService } from '../../../infrastructure/auth/supabase-auth.
   imports: [ReactiveFormsModule, TranslocoPipe],
 })
 export class AuthComponent {
-  private readonly auth = inject(SupabaseAuthService);
+  private readonly auth = inject(AUTH_SESSION);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly transloco = inject(TranslocoService);
 
   constructor() {
     effect(() => {
-      if (this.auth.session()) this.router.navigate(['/']);
+      if (this.auth.authState()) this.router.navigate(['/']);
     });
   }
 

@@ -1,8 +1,10 @@
+import { Injectable, inject } from '@angular/core';
 import { Quest } from '../domain/quest/quest.entity';
 import { UserProfile } from '../domain/profile/user-profile.entity';
 import { IQuestRepository } from '../domain/quest/quest.repository';
 import { IUserProfileRepository } from '../domain/profile/profile.repository';
 import { ICurrentUserPort } from '../domain/auth/current-user.port';
+import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../app/core/di-tokens';
 
 export interface DashboardData {
   userProfile: UserProfile;
@@ -11,12 +13,11 @@ export interface DashboardData {
   allQuests: Quest[];
 }
 
+@Injectable({ providedIn: 'root' })
 export class GetUserDashboardUseCase {
-  constructor(
-    private readonly questRepo: IQuestRepository,
-    private readonly profileRepo: IUserProfileRepository,
-    private readonly currentUser: ICurrentUserPort,
-  ) {}
+  private readonly questRepo = inject<IQuestRepository>(QUEST_REPOSITORY);
+  private readonly profileRepo = inject<IUserProfileRepository>(PROFILE_REPOSITORY);
+  private readonly currentUser = inject<ICurrentUserPort>(CURRENT_USER);
 
   async execute(): Promise<DashboardData> {
     const userId = this.currentUser.getUserId();
