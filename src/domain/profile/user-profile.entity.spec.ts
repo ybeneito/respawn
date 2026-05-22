@@ -25,6 +25,20 @@ describe('UserProfile', () => {
     expect(profile.lives).toBe(8);
   });
 
+  it('withOnboardingDone returns a new profile with onboardingDone true', () => {
+    const profile = makeProfile();
+    const updated = profile.withOnboardingDone();
+    expect(updated.onboardingDone).toBe(true);
+    expect(updated.userId).toBe(profile.userId);
+    expect(updated.xp).toBe(profile.xp);
+  });
+
+  it('withOnboardingDone does not mutate the original profile', () => {
+    const profile = makeProfile();
+    profile.withOnboardingDone();
+    expect(profile.onboardingDone).toBe(false);
+  });
+
   it('stageForLevel returns the correct stage for each level boundary', () => {
     expect(makeProfile().stageForLevel(1)).toBe('kitten');
     expect(makeProfile().stageForLevel(4)).toBe('stray');

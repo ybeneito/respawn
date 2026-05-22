@@ -85,4 +85,12 @@ export class UserProfile {
       this.onboardingDone, true,
     );
   }
+
+  withOnboardingDone(): UserProfile {
+    return new UserProfile(
+      this.userId, this.username, this.avatarUrl, this.palette,
+      this.xp, this.level, this.lives, this.streak, this.createdAt,
+      true, this.tourDone,
+    );
+  }
 }
