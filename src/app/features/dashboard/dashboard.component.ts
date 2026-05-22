@@ -3,6 +3,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { QUEST_REPOSITORY, PROFILE_REPOSITORY, CURRENT_USER } from '../../core/di-tokens';
 import { GetUserDashboardUseCase, DashboardData } from '../../../application/get-user-dashboard.use-case';
 import { CompleteQuestUseCase } from '../../../application/complete-quest.use-case';
+import { MarkTourDoneUseCase } from '../../../application/mark-tour-done.use-case';
 import { ProfileStateService } from '../../core/profile-state.service';
 import { CreateQuestModalComponent } from '../quests/create-quest-modal/create-quest-modal.component';
 import { QuestRowComponent } from '../quests/quest-row.component';
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly transloco = inject(TranslocoService);
   private readonly dashboardUseCase = new GetUserDashboardUseCase(this.questRepo, this.profileRepo, this.currentUser);
   private readonly completeUseCase = new CompleteQuestUseCase(this.questRepo, this.profileRepo, this.currentUser);
+  private readonly markTourDone = new MarkTourDoneUseCase(this.profileRepo, this.currentUser);
   private readonly inFlightQuestIds = new Set<string>();
   private readonly pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
   private xpToastTimerId: ReturnType<typeof setTimeout> | null = null;
@@ -118,11 +120,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async onTourCompleted(): Promise<void> {
     try {
-      await this.profileRepo.updateTourDone(this.currentUser.getUserId());
+      const updatedProfile = await this.markTourDone.execute();
       this.data.update(prev =>
-        prev ? { ...prev, userProfile: prev.userProfile.withTourDone() } : prev,
+        prev ? { ...prev, userProfile: updatedProfile } : prev,
       );
-      this.profileState.profile.update(prof => prof?.withTourDone() ?? prof);
+      this.profileState.profile.set(updatedProfile);
     } catch {
       this.completeError.set(this.transloco.translate('dashboard.completeError'));
     }
